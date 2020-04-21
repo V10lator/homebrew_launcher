@@ -11,7 +11,7 @@
 #ifndef DWPAD_CONTROLLER_H_
 #define DWPAD_CONTROLLER_H_
 
-#include "GuiController.h"
+#include <gui/GuiController.h>
 #include "dynamic_libs/padscore_functions.h"
 
 class DWPadController : public GuiController
@@ -24,8 +24,6 @@ public:
         memset(&kpadData, 0, sizeof(KPADData));
         
         data.validPointer = true;
-        isDPadMode = true;
-        showPointer = true;
     }
     
     //!Destructor
@@ -104,21 +102,24 @@ public:
         {
             if(kpadData.btns_h & WPAD_BUTTON_LEFT)
             {
-                if(data.x > -(width / 2)) data.x -= 10;
+                data.x -= 10;
             }
             if(kpadData.btns_h & WPAD_BUTTON_RIGHT)
             {
-                if(data.x < (width / 2)) data.x += 10;
+                data.x += 10;
             }
             if(kpadData.btns_h & WPAD_BUTTON_UP)
             {
-                if(data.y < (height / 2)) data.y += 10;
+                data.y += 10;
             }
             if(kpadData.btns_h & WPAD_BUTTON_DOWN)
             {
-                if(data.y > -(height / 2)) data.y -= 10;
+                data.y -= 10;
             }
             
+            data.x += kpadData.nunchuck.stick_x * 20;
+            data.y += kpadData.nunchuck.stick_y * 20;
+
             data.buttons_r = remapWiiMoteButtons(kpadData.btns_r);
             data.buttons_h = remapWiiMoteButtons(kpadData.btns_h);
             data.buttons_d = remapWiiMoteButtons(kpadData.btns_d);
@@ -127,25 +128,33 @@ public:
         {
             if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_LEFT)
             {
-                if(data.x > -(width / 2)) data.x -= 10;
+                data.x -= 10;
             }
             if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_RIGHT)
             {
-                if(data.x < (width / 2)) data.x += 10;
+                data.x += 10;
             }
             if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_UP)
             {
-                if(data.y < (height / 2)) data.y += 10;
+                data.y += 10;
             }
             if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_DOWN)
             {
-                if(data.y > -(height / 2)) data.y -= 10;
+                data.y -= 10;
             }
-            
+
+            data.x += kpadData.classic.lstick_x * 20;
+            data.y += kpadData.classic.lstick_y * 20;
+
             data.buttons_r = remapClassicButtons(kpadData.classic.btns_r);
             data.buttons_h = remapClassicButtons(kpadData.classic.btns_h);
             data.buttons_d = remapClassicButtons(kpadData.classic.btns_d);
         }
+
+        if (data.x < -(width / 2)) data.x = -(width / 2);
+        if (data.x > (width / 2)) data.x = (width / 2);
+        if (data.y > (height / 2)) data.y = (height / 2);
+        if (data.y < -(height / 2)) data.y = -(height / 2);
         
         return true;
     }
