@@ -32,10 +32,6 @@ public:
     //Remove the DPAD buttons (by clearing their bits) so that they aren't used by the Gui processes.
     u32 fixButtons(u32 buttons)
     {
-        buttons &= ~VPAD_BUTTON_LEFT;
-        buttons &= ~VPAD_BUTTON_RIGHT;
-        buttons &= ~VPAD_BUTTON_UP;
-        buttons &= ~VPAD_BUTTON_DOWN;
         buttons &= ~VPAD_BUTTON_A;
         return buttons;
     }
@@ -49,23 +45,6 @@ public:
         
         if(vpadError == 0)
         {
-            if(vpad.btns_h & VPAD_BUTTON_LEFT)
-            {
-                data.x -= 10;
-            }
-            if(vpad.btns_h & VPAD_BUTTON_RIGHT)
-            {
-                data.x += 10;
-            }
-            if(vpad.btns_h & VPAD_BUTTON_UP)
-            {
-                data.y += 10;
-            }
-            if(vpad.btns_h & VPAD_BUTTON_DOWN)
-            {
-                data.y -= 10;
-            }
-
             data.x += vpad.lstick.x * 20;
             data.y += vpad.lstick.y * 20;
 
