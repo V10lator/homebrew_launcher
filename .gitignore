@@ -22,3 +22,5 @@
 /NUSPacker.jar
 /fst.bin
 /channel/code/*.rpx
+.vscode
+src/resources/filelist.cpp
