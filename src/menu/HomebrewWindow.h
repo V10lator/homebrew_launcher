@@ -37,6 +37,16 @@ private:
     void OnLeftArrowClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger);
     void OnRightArrowClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger);
 
+    int searchSelectedButton();
+    void OnUpDownClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger);
+    void clearSelections()
+    {
+        for (unsigned int i = 0; i < homebrewButtons.size(); i++)
+        {
+            homebrewButtons[i].button->clearState(STATE_SELECTED);
+        }
+    }
+
     void OnCloseTcpReceiverFinish(GuiElement *element);
     void OnTcpReceiveStart(GuiElement *element, uint32_t ip);
     void OnTcpReceiveFinish(GuiElement *element, uint32_t ip, int result);
@@ -46,10 +56,12 @@ private:
 
     GuiImageData* arrowRightImageData;
     GuiImageData* arrowLeftImageData;
+    GuiImageData* homebrewButtonSelectedImageData;
     GuiImage arrowRightImage;
     GuiImage arrowLeftImage;
     GuiButton arrowRightButton;
     GuiButton arrowLeftButton;
+    GuiButton updownButtons;
     GuiText hblVersionText;
 
     typedef struct
@@ -61,6 +73,7 @@ private:
         GuiText *descriptionLabel;
         GuiImageData *iconImgData;
         GuiImage *iconImg;
+        GuiImage *selectImg;
     } homebrewButton;
 
     std::vector<homebrewButton> homebrewButtons;
@@ -68,6 +81,8 @@ private:
     GuiTrigger wpadTouchTrigger;
     GuiTrigger buttonLTrigger;
     GuiTrigger buttonRTrigger;
+    GuiTrigger buttonUpTrigger;
+    GuiTrigger buttonDownTrigger;
     int listOffset;
     int currentLeftPosition;
     int targetLeftPosition;
