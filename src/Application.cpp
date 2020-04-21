@@ -36,11 +36,11 @@ Application::Application()
     , mainWindow(NULL)
     , exitCode(EXIT_RELAUNCH_ON_LOAD)
 {
-    controller[0] = new VPadController(GuiTrigger::CHANNEL_1);
-    controller[1] = new WPadController(GuiTrigger::CHANNEL_2);
-    controller[2] = new WPadController(GuiTrigger::CHANNEL_3);
-    controller[3] = new WPadController(GuiTrigger::CHANNEL_4);
-    controller[4] = new WPadController(GuiTrigger::CHANNEL_5);
+    controller[0] = new DVPadController(GuiTrigger::CHANNEL_1);
+    controller[1] = new DWPadController(GuiTrigger::CHANNEL_2);
+    controller[2] = new DWPadController(GuiTrigger::CHANNEL_3);
+    controller[3] = new DWPadController(GuiTrigger::CHANNEL_4);
+    controller[4] = new DWPadController(GuiTrigger::CHANNEL_5);
 
     //! load resources
     Resources::LoadFiles("sd:/wiiu/apps/homebrew_launcher/resources");
@@ -175,64 +175,6 @@ void Application::executeThread(void)
 
             //! update controller states
             mainWindow->update(controller[i]);
-            
-            //If the + button on the GamePad is pressed, switch to DPAD mode and vice versa.
-            if((i == 0) && (controller[i]->data.buttons_d & GuiTrigger::BUTTON_PLUS))
-            {
-                if(controller[i]->isDPadMode)
-                {
-                    delete controller[i];
-                    controller[i] = new VPadController(GuiTrigger::CHANNEL_1);
-                }
-                else
-                {
-                    delete controller[i];
-                    controller[i] = new DVPadController(GuiTrigger::CHANNEL_1);
-                }
-            }
-            
-            //If the + button on any other controller is pressed, switch to DPAD mode and vice versa.
-            else if(controller[i]->data.buttons_d & GuiTrigger::BUTTON_PLUS)
-            {
-                if(controller[i]->isDPadMode)
-                {
-                    delete controller[i];
-                    switch(i)
-                    {
-                        case 1:
-                            controller[i] = new WPadController(GuiTrigger::CHANNEL_2);
-                            break;
-                        case 2:
-                            controller[i] = new WPadController(GuiTrigger::CHANNEL_3);
-                            break;
-                        case 3:
-                            controller[i] = new WPadController(GuiTrigger::CHANNEL_4);
-                            break;
-                        case 4:
-                            controller[i] = new WPadController(GuiTrigger::CHANNEL_5);
-                            break;
-                    }
-                }
-                else
-                {
-                    delete controller[i];
-                    switch(i)
-                    {
-                        case 1:
-                            controller[i] = new DWPadController(GuiTrigger::CHANNEL_2);
-                            break;
-                        case 2:
-                            controller[i] = new DWPadController(GuiTrigger::CHANNEL_3);
-                            break;
-                        case 3:
-                            controller[i] = new DWPadController(GuiTrigger::CHANNEL_4);
-                            break;
-                        case 4:
-                            controller[i] = new DWPadController(GuiTrigger::CHANNEL_5);
-                            break;
-                    }
-                }
-            }
         }
 
         //mainWindow->process();

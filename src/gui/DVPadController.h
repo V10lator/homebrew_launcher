@@ -9,7 +9,7 @@
 #ifndef DPAD_CONTROLLER_H_
 #define DPAD_CONTROLLER_H_
 
-#include "GuiController.h"
+#include <gui/GuiController.h>
 #include "dynamic_libs/vpad_functions.h"
 
 class DVPadController : public GuiController
@@ -24,8 +24,6 @@ public:
         memset(&lastData, 0, sizeof(PadData));
         
         data.validPointer = true;
-        isDPadMode = true;
-        showPointer = true;
     }
     
     //!Destructor
@@ -53,20 +51,28 @@ public:
         {
             if(vpad.btns_h & VPAD_BUTTON_LEFT)
             {
-                if(data.x > -(width / 2)) data.x -= 10;
+                data.x -= 10;
             }
             if(vpad.btns_h & VPAD_BUTTON_RIGHT)
             {
-                if(data.x < (width / 2)) data.x += 10;
+                data.x += 10;
             }
             if(vpad.btns_h & VPAD_BUTTON_UP)
             {
-                if(data.y < (height / 2)) data.y += 10;
+                data.y += 10;
             }
             if(vpad.btns_h & VPAD_BUTTON_DOWN)
             {
-                if(data.y > -(height / 2)) data.y -= 10;
+                data.y -= 10;
             }
+
+            data.x += vpad.lstick.x * 20;
+            data.y += vpad.lstick.y * 20;
+
+            if (data.x < -(width / 2)) data.x = -(width / 2);
+            if (data.x > (width / 2)) data.x = (width / 2);
+            if (data.y > (height / 2)) data.y = (height / 2);
+            if (data.y < -(height / 2)) data.y = -(height / 2);
             
             if(vpad.btns_h & VPAD_BUTTON_A)
                 data.touched = true;

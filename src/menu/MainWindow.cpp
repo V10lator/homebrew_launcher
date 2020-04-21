@@ -38,7 +38,7 @@ MainWindow::MainWindow(int w, int h)
 
     for(int i = 0; i < 5; i++)
     {
-        std::string filename = strfmt("player%i_point.png", i);
+        std::string filename = StringTools::strfmt("player%i_point.png", i);
         pointerImgData[i] = Resources::GetImageData(filename.c_str());
         pointerImg[i] = new GuiImage(pointerImgData[i]);
         pointerImg[i]->setScale(1.5f);
@@ -137,7 +137,7 @@ void MainWindow::update(GuiController *controller)
 //        }
 //    }
 
-    if(controller->showPointer && controller->data.validPointer)
+    if(controller->data.validPointer)
     {
         int wpadIdx = controller->chanIdx;
         f32 posX = controller->data.x;
@@ -145,11 +145,6 @@ void MainWindow::update(GuiController *controller)
         pointerImg[wpadIdx]->setPosition(posX, posY);
         pointerImg[wpadIdx]->setAngle(controller->data.pointerAngle);
         pointerValid[wpadIdx] = true;
-    }
-    
-    if(!controller->showPointer)
-    {
-        pointerValid[controller->chanIdx] = false;
     }
 }
 
