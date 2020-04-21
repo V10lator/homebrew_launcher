@@ -99,24 +99,7 @@ public:
         KPADRead(chanIdx-1, &kpadData, 1);
         
         if(kpadData.device_type <= 1)
-        {
-            if(kpadData.btns_h & WPAD_BUTTON_LEFT)
-            {
-                data.x -= 10;
-            }
-            if(kpadData.btns_h & WPAD_BUTTON_RIGHT)
-            {
-                data.x += 10;
-            }
-            if(kpadData.btns_h & WPAD_BUTTON_UP)
-            {
-                data.y += 10;
-            }
-            if(kpadData.btns_h & WPAD_BUTTON_DOWN)
-            {
-                data.y -= 10;
-            }
-            
+        {        
             data.x += kpadData.nunchuck.stick_x * 20;
             data.y += kpadData.nunchuck.stick_y * 20;
 
@@ -126,23 +109,6 @@ public:
         }
         else
         {
-            if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_LEFT)
-            {
-                data.x -= 10;
-            }
-            if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_RIGHT)
-            {
-                data.x += 10;
-            }
-            if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_UP)
-            {
-                data.y += 10;
-            }
-            if(kpadData.classic.btns_h & WPAD_CLASSIC_BUTTON_DOWN)
-            {
-                data.y -= 10;
-            }
-
             data.x += kpadData.classic.lstick_x * 20;
             data.y += kpadData.classic.lstick_y * 20;
 
