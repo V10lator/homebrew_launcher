@@ -26,7 +26,7 @@ MainWindow::MainWindow(int w, int h)
     : width(w)
     , height(h)
     , bgImageColor(w, h, (GX2Color){ 0, 0, 0, 0 })
-    , bgParticleImg(w, h, 500, 30.0f,30.0f,0.2f,0.8f)
+    , bgParticleImg(w, h, 500, 0.0f,30.0f,0.2f,0.8f)
     , homebrewWindow(w, h)
 {
     bgImageColor.setImageColor((GX2Color){  79, 153, 239, 255 }, 0);
