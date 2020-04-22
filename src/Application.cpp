@@ -175,6 +175,12 @@ void Application::executeThread(void)
 
             //! update controller states
             mainWindow->update(controller[i]);
+
+            if (mainWindow->pointerToInvalidate[i])
+            {
+                controller[i]->invalidatePointer();
+                mainWindow->pointerToInvalidate[i] = false;
+            }
         }
 
         //mainWindow->process();

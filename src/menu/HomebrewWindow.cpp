@@ -23,6 +23,7 @@
 #include "custom/utils/HomebrewXML.h"
 #include "utils/utils.h"
 #include "HomebrewLaunchWindow.h"
+#include <utils/StringTools.h>
 
 #define DEFAULT_WIILOAD_PORT        4299
 
@@ -189,12 +190,14 @@ HomebrewWindow::~HomebrewWindow()
         delete homebrewButtons[i].button;
         delete homebrewButtons[i].iconImgData;
         delete homebrewButtons[i].iconImg;
+        delete homebrewButtons[i].selectImg;
     }
 
     Resources::RemoveSound(buttonClickSound);
     Resources::RemoveImageData(homebrewButtonImgData);
     Resources::RemoveImageData(arrowRightImageData);
     Resources::RemoveImageData(arrowLeftImageData);
+    Resources::RemoveImageData(homebrewButtonSelectedImageData);
 }
 
 void HomebrewWindow::OnOpenEffectFinish(GuiElement *element)
@@ -314,6 +317,7 @@ void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *contr
     if(index < 0 && trigger == &buttonUpTrigger)
     {
         homebrewButtons[min].button->setState(STATE_SELECTED);
+        selected(controller);
         return;
     }
     
@@ -322,6 +326,7 @@ void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *contr
         homebrewButtons[index].button->clearState(STATE_SELECTED);
         index--;
         homebrewButtons[index].button->setState(STATE_SELECTED);
+        selected(controller);
     }
     else if(trigger == &buttonDownTrigger && index < max - 1)
     {
@@ -333,6 +338,7 @@ void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *contr
         else
             index = min;
         homebrewButtons[index].button->setState(STATE_SELECTED);
+        selected(controller);
     }
 }
 
