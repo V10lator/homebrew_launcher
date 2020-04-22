@@ -5,7 +5,7 @@
  * can now use this program without trouble. The program will not be able to detect any DPAD button
  * presses in this mode, as it may interfere with the user who is navigating the pointer.
  *
- * Created by CreeperMario in July 2017.
+ * Created by CreeperMario in July 2017 modified by GaryOderNichts in April 2020.
  */
 
 #ifndef DWPAD_CONTROLLER_H_
@@ -13,82 +13,124 @@
 
 #include <gui/GuiController.h>
 #include "dynamic_libs/padscore_functions.h"
+#include "DPadControllerBase.h"
 
-class DWPadController : public GuiController
+class DWPadController : public DPadControllerBase
 {
 public:
     
     //!Constructor
-    DWPadController(int channel) : GuiController(channel)
+    DWPadController(int channel) : DPadControllerBase(channel)
     {
         memset(&kpadData, 0, sizeof(KPADData));
         
-        data.validPointer = true;
+        data.validPointer = false;
     }
     
     //!Destructor
     virtual ~DWPadController() {}
-    
-    //Remove the DPAD buttons (by ignoring their bits) so that they aren't used by the Gui processes.
+
     u32 remapWiiMoteButtons(u32 buttons)
     {
-        u32 temp = 0;
-        
-        if(buttons & WPAD_BUTTON_MINUS)
-            temp |= GuiTrigger::BUTTON_MINUS;
+        u32 conv_buttons = 0;
+
+        if(buttons & WPAD_BUTTON_LEFT)
+            conv_buttons |= GuiTrigger::BUTTON_LEFT;
+
+        if(buttons & WPAD_BUTTON_RIGHT)
+            conv_buttons |= GuiTrigger::BUTTON_RIGHT;
+
+        if(buttons & WPAD_BUTTON_DOWN)
+            conv_buttons |= GuiTrigger::BUTTON_DOWN;
+
+        if(buttons & WPAD_BUTTON_UP)
+            conv_buttons |= GuiTrigger::BUTTON_UP;
+
         if(buttons & WPAD_BUTTON_PLUS)
-            temp |= GuiTrigger::BUTTON_PLUS;
+            conv_buttons |= GuiTrigger::BUTTON_PLUS;
+
         if(buttons & WPAD_BUTTON_2)
-            temp |= GuiTrigger::BUTTON_2;
+            conv_buttons |= GuiTrigger::BUTTON_2;
+
         if(buttons & WPAD_BUTTON_1)
-            temp |= GuiTrigger::BUTTON_1;
+            conv_buttons |= GuiTrigger::BUTTON_1;
+
         if(buttons & WPAD_BUTTON_B)
-            temp |= GuiTrigger::BUTTON_B;
+            conv_buttons |= GuiTrigger::BUTTON_B;
+
         if(buttons & WPAD_BUTTON_A)
-            temp |= GuiTrigger::BUTTON_A;
-        if(buttons & WPAD_BUTTON_Z) //Nunchuk only
-            temp |= GuiTrigger::BUTTON_Z;
-        if(buttons & WPAD_BUTTON_C) //Nunchuk only
-            temp |= GuiTrigger::BUTTON_C;
+            conv_buttons |= GuiTrigger::BUTTON_A;
+
+        if(buttons & WPAD_BUTTON_MINUS)
+            conv_buttons |= GuiTrigger::BUTTON_MINUS;
+
+        if(buttons & WPAD_BUTTON_Z)
+            conv_buttons |= GuiTrigger::BUTTON_Z;
+
+        if(buttons & WPAD_BUTTON_C)
+            conv_buttons |= GuiTrigger::BUTTON_C;
+
         if(buttons & WPAD_BUTTON_HOME)
-            temp |= GuiTrigger::BUTTON_HOME;
-        
-        return temp;
+            conv_buttons |= GuiTrigger::BUTTON_HOME;
+
+        return conv_buttons;
     }
-    
-    //Remove the DPAD buttons (by ignoring their bits) so that they aren't used by the Gui processes.
     u32 remapClassicButtons(u32 buttons)
     {
-        u32 temp = 0;
-        
-        if(buttons & WPAD_CLASSIC_BUTTON_MINUS)
-            temp |= GuiTrigger::BUTTON_MINUS;
+        u32 conv_buttons = 0;
+
+        if(buttons & WPAD_CLASSIC_BUTTON_LEFT)
+            conv_buttons |= GuiTrigger::BUTTON_LEFT;
+
+        if(buttons & WPAD_CLASSIC_BUTTON_RIGHT)
+            conv_buttons |= GuiTrigger::BUTTON_RIGHT;
+
+        if(buttons & WPAD_CLASSIC_BUTTON_DOWN)
+            conv_buttons |= GuiTrigger::BUTTON_DOWN;
+
+        if(buttons & WPAD_CLASSIC_BUTTON_UP)
+            conv_buttons |= GuiTrigger::BUTTON_UP;
+
         if(buttons & WPAD_CLASSIC_BUTTON_PLUS)
-            temp |= GuiTrigger::BUTTON_PLUS;
+            conv_buttons |= GuiTrigger::BUTTON_PLUS;
+
         if(buttons & WPAD_CLASSIC_BUTTON_X)
-            temp |= GuiTrigger::BUTTON_X;
+            conv_buttons |= GuiTrigger::BUTTON_X;
+
         if(buttons & WPAD_CLASSIC_BUTTON_Y)
-            temp |= GuiTrigger::BUTTON_Y;
+            conv_buttons |= GuiTrigger::BUTTON_Y;
+
         if(buttons & WPAD_CLASSIC_BUTTON_B)
-            temp |= GuiTrigger::BUTTON_B;
+            conv_buttons |= GuiTrigger::BUTTON_B;
+
         if(buttons & WPAD_CLASSIC_BUTTON_A)
-            temp |= GuiTrigger::BUTTON_A;
+            conv_buttons |= GuiTrigger::BUTTON_A;
+
+        if(buttons & WPAD_CLASSIC_BUTTON_MINUS)
+            conv_buttons |= GuiTrigger::BUTTON_MINUS;
+
         if(buttons & WPAD_CLASSIC_BUTTON_HOME)
-            temp |= GuiTrigger::BUTTON_HOME;
+            conv_buttons |= GuiTrigger::BUTTON_HOME;
+
         if(buttons & WPAD_CLASSIC_BUTTON_ZR)
-            temp |= GuiTrigger::BUTTON_ZR;
+            conv_buttons |= GuiTrigger::BUTTON_ZR;
+
         if(buttons & WPAD_CLASSIC_BUTTON_ZL)
-            temp |= GuiTrigger::BUTTON_ZL;
+            conv_buttons |= GuiTrigger::BUTTON_ZL;
+
         if(buttons & WPAD_CLASSIC_BUTTON_R)
-            temp |= GuiTrigger::BUTTON_R;
+            conv_buttons |= GuiTrigger::BUTTON_R;
+
         if(buttons & WPAD_CLASSIC_BUTTON_L)
-            temp |= GuiTrigger::BUTTON_L;
-        
-        return temp;
+            conv_buttons |= GuiTrigger::BUTTON_L;
+
+        return conv_buttons;
     }
     
-    bool update(int width, int height)
+    virtual bool update(int width, int height) override
     {
+        DPadControllerBase::update(width, height);
+
         lastData = data;
         u32 controller_type;
         
@@ -122,6 +164,8 @@ public:
         if (data.y > (height / 2)) data.y = (height / 2);
         if (data.y < -(height / 2)) data.y = -(height / 2);
         
+        checkValidPointer();
+
         return true;
     }
     

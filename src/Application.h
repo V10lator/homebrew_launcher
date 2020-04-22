@@ -20,6 +20,7 @@
 #include "menu/MainWindow.h"
 #include "video/CVideo.h"
 #include "system/CThread.h"
+#include "gui/DPadControllerBase.h"
 
 // forward declaration
 class FreeTypeGX;
@@ -70,8 +71,7 @@ private:
     GuiSound *bgMusic;
     CVideo *video;
     MainWindow *mainWindow;
-    FreeTypeGX *fontSystem;
-    GuiController *controller[5];
+    DPadControllerBase *controller[5];
     int exitCode;
 };
 

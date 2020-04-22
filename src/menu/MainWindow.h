@@ -111,11 +111,15 @@ public:
         drcElements.clear();
     }
 
+    bool pointerToInvalidate[5];
+
     void drawDrc(CVideo *video);
     void drawTv(CVideo *video);
     void update(GuiController *controller);
     void updateEffects();
 private:
+    void OnHomebrewButtonSelected(const GuiController* controller);
+
     int width, height;
     std::vector<GuiElement *> drcElements;
     std::vector<GuiElement *> tvElements;

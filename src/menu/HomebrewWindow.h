@@ -29,6 +29,16 @@ public:
 
     void draw(CVideo *pVideo);
 
+    void clearSelections()
+    {
+        for (unsigned int i = 0; i < homebrewButtons.size(); i++)
+        {
+            homebrewButtons[i].button->clearState(STATE_SELECTED);
+        }
+    }
+
+    sigslot::signal1<const GuiController*> selected;
+
 private:
     void OnOpenEffectFinish(GuiElement *element);
     void OnCloseEffectFinish(GuiElement *element);
@@ -39,13 +49,6 @@ private:
 
     int searchSelectedButton();
     void OnUpDownClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger);
-    void clearSelections()
-    {
-        for (unsigned int i = 0; i < homebrewButtons.size(); i++)
-        {
-            homebrewButtons[i].button->clearState(STATE_SELECTED);
-        }
-    }
 
     void OnCloseTcpReceiverFinish(GuiElement *element);
     void OnTcpReceiveStart(GuiElement *element, uint32_t ip);
