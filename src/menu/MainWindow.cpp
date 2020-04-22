@@ -41,8 +41,10 @@ MainWindow::MainWindow(int w, int h)
         pointerImg[i] = new GuiImage(pointerImgData[i]);
         pointerImg[i]->setScale(1.5f);
         pointerValid[i] = false;
+        pointerToInvalidate[i] = false;
     }
 
+    homebrewWindow.selected.connect(this, &MainWindow::OnHomebrewButtonSelected);
     append(&homebrewWindow);
 }
 
@@ -183,6 +185,7 @@ void MainWindow::drawTv(CVideo *video)
         pointerImg[0]->setAlpha(0.5f);
         pointerImg[0]->draw(video);
         pointerImg[0]->setAlpha(1.0f);
+        pointerValid[0] = false;
     }
     
     for(int i = 1; i < 5; i++)
@@ -193,4 +196,9 @@ void MainWindow::drawTv(CVideo *video)
             pointerValid[i] = false;
         }
     }
+}
+
+void MainWindow::OnHomebrewButtonSelected(const GuiController* controller)
+{
+    pointerToInvalidate[controller->chanIdx] = true;
 }
