@@ -40,7 +40,8 @@ HomebrewWindow::HomebrewWindow(int w, int h)
     , arrowLeftImage(arrowLeftImageData)
     , arrowRightButton(arrowRightImage.getWidth(), arrowRightImage.getHeight())
     , arrowLeftButton(arrowLeftImage.getWidth(), arrowLeftImage.getHeight())
-    , updownButtons(w, h)
+    , updownButtons(0, 0)
+    , aButton(0, 0)
     , hblVersionText("Homebrew Launcher " HBL_VERSION " by Dimok", 32, glm::vec4(1.0f))
     , touchTrigger(GuiTrigger::CHANNEL_1, GuiTrigger::VPAD_TOUCH)
     , wpadTouchTrigger(GuiTrigger::CHANNEL_2 | GuiTrigger::CHANNEL_3 | GuiTrigger::CHANNEL_4 | GuiTrigger::CHANNEL_5, GuiTrigger::BUTTON_A)
@@ -48,6 +49,7 @@ HomebrewWindow::HomebrewWindow(int w, int h)
     , buttonRTrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_R | GuiTrigger::BUTTON_RIGHT, true)
     , buttonUpTrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_UP, true)
     , buttonDownTrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_DOWN, true)
+    , buttonATrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_A, true)
     , tcpReceiver(DEFAULT_WIILOAD_PORT)
 {
     tcpReceiver.serverReceiveStart.connect(this, &HomebrewWindow::OnTcpReceiveStart);
@@ -178,6 +180,10 @@ HomebrewWindow::HomebrewWindow(int w, int h)
     updownButtons.setTrigger(&buttonDownTrigger);
     updownButtons.clicked.connect(this, &HomebrewWindow::OnUpDownClick);
     append(&updownButtons);
+
+    aButton.setTrigger(&buttonATrigger);
+    aButton.clicked.connect(this, &HomebrewWindow::OnAClick);
+    append(&aButton);
 }
 
 HomebrewWindow::~HomebrewWindow()
@@ -229,6 +235,12 @@ void HomebrewWindow::OnLaunchBoxCloseClick(GuiElement *element)
 void HomebrewWindow::OnHomebrewButtonClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
 {
     bool disableButtons = false;
+
+    // If there is no pointer dont click
+    if (trigger == &wpadTouchTrigger && !((ControllerBase*) controller)->showPointer)
+    {
+        return;
+    }
 
     for(u32 i = 0; i < homebrewButtons.size(); i++)
     {
@@ -340,6 +352,19 @@ void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *contr
         homebrewButtons[index].button->setState(STATE_SELECTED);
         selected(controller);
     }
+}
+
+void HomebrewWindow::OnAClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
+{
+    // If the controller has a pointer on screen
+    if(((ControllerBase*) controller)->showPointer)
+        return;
+
+    int index = searchSelectedButton();
+    if (index < 0)
+        return;
+
+    homebrewButtons[index].button->clicked(homebrewButtons[index].button, controller, trigger);
 }
 
 void HomebrewWindow::draw(CVideo *pVideo)

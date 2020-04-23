@@ -18,9 +18,9 @@
 #define _APPLICATION_H
 
 #include "menu/MainWindow.h"
-#include "video/CVideo.h"
-#include "system/CThread.h"
-#include "gui/DPadControllerBase.h"
+#include <video/CVideo.h>
+#include <system/CThread.h>
+#include "gui/ControllerBase.h"
 
 // forward declaration
 class FreeTypeGX;
@@ -71,7 +71,7 @@ private:
     GuiSound *bgMusic;
     CVideo *video;
     MainWindow *mainWindow;
-    DPadControllerBase *controller[5];
+    ControllerBase *controller[5];
     int exitCode;
 };
 

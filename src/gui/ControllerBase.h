@@ -1,24 +1,30 @@
-#ifndef DPAD_CONTROLLER_BASE_H_
-#define DPAD_CONTROLLER_BASE_H_
+/**
+ * Base for controllers
+ *
+ * Created by GaryOderNichts in April 2020.
+ */
+
+#ifndef CONTROLLER_BASE_H_
+#define CONTROLLER_BASE_H_
 
 #include <gui/GuiController.h>
 #include "dynamic_libs/vpad_functions.h"
 
 #define POINTER_TIMEOUT 250
 
-class DPadControllerBase : public GuiController
+class ControllerBase : public GuiController
 {
 public:
     
     //!Constructor
-    DPadControllerBase(int channel) : GuiController(channel)
+    ControllerBase(int channel) : GuiController(channel)
     {
-        data.validPointer = false;
         updates = 0;
+        showPointer = false;
     }
     
     //!Destructor
-    virtual ~DPadControllerBase() {}
+    virtual ~ControllerBase() {}
     
     void invalidatePointer()
     {
@@ -38,15 +44,15 @@ public:
             if (updates >= POINTER_TIMEOUT)
             {
                 // we did not move in time or our pointer is invalid
-                data.validPointer = false;
+                showPointer = false;
                 // do not overflow counter
                 updates = POINTER_TIMEOUT + 1;
             }
         }
         else
         {
-            // we moved so the pointer is valid
-            data.validPointer = true;
+            // we moved so show the pointer
+            showPointer = true;
 
             // reset counter
             updates = 0;
@@ -57,6 +63,8 @@ public:
         return false;
     }
 
+    bool showPointer;
+    
 protected:
     uint64_t updates;
 };

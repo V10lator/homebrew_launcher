@@ -22,6 +22,7 @@
 #include "gui/Gui.h"
 #include "HomebrewWindow.h"
 #include "gui/GuiParticleImage.h"
+#include "gui/ControllerBase.h"
 
 class CVideo;
 
@@ -115,7 +116,7 @@ public:
 
     void drawDrc(CVideo *video);
     void drawTv(CVideo *video);
-    void update(GuiController *controller);
+    void update(ControllerBase *controller);
     void updateEffects();
 private:
     void OnHomebrewButtonSelected(const GuiController* controller);

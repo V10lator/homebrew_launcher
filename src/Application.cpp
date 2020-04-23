@@ -21,8 +21,6 @@
 #include "Application.h"
 #include "common/common.h"
 #include "gui/FreeTypeGX.h"
-#include "gui/VPadController.h"
-#include "gui/WPadController.h"
 #include "gui/DVPadController.h"
 #include "gui/DWPadController.h"
 #include "resources/Resources.h"
