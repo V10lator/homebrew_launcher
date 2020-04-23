@@ -142,9 +142,23 @@ public:
         
         if(kpadData.device_type <= 1)
         {        
-            data.x += kpadData.nunchuck.stick_x * 20;
-            data.y += kpadData.nunchuck.stick_y * 20;
+            data.validPointer = (kpadData.pos_valid == 1 || kpadData.pos_valid == 2) && (kpadData.pos_x >= -1.0f && kpadData.pos_x <= 1.0f) && (kpadData.pos_y >= -1.0f && kpadData.pos_y <= 1.0f);
+            if(data.validPointer)
+            {
+                data.x = (width >> 1) * kpadData.pos_x;
+                data.y = (height >> 1) * (-kpadData.pos_y);
 
+                if(kpadData.angle_y > 0.0f)
+                    data.pointerAngle = (-kpadData.angle_x + 1.0f) * 0.5f * 180.0f;
+                else
+                    data.pointerAngle = (kpadData.angle_x + 1.0f) * 0.5f * 180.0f - 180.0f;
+            }
+            else
+            {
+                data.x += kpadData.nunchuck.stick_x * 20;
+                data.y += kpadData.nunchuck.stick_y * 20;
+            }
+            
             data.buttons_r = remapWiiMoteButtons(kpadData.btns_r);
             data.buttons_h = remapWiiMoteButtons(kpadData.btns_h);
             data.buttons_d = remapWiiMoteButtons(kpadData.btns_d);
