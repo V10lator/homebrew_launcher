@@ -47,6 +47,8 @@ public:
                 showPointer = false;
                 // do not overflow counter
                 updates = POINTER_TIMEOUT + 1;
+
+                return false;
             }
         }
         else
@@ -56,11 +58,9 @@ public:
 
             // reset counter
             updates = 0;
-
-            return true;
         }
 
-        return false;
+        return true;
     }
 
     bool showPointer;

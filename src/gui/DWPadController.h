@@ -178,7 +178,8 @@ public:
         if (data.y > (height / 2)) data.y = (height / 2);
         if (data.y < -(height / 2)) data.y = -(height / 2);
         
-        checkValidPointer();
+        if (!checkValidPointer())
+            data.validPointer = false;
 
         return true;
     }

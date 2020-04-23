@@ -14,3 +14,5 @@
 /installer/sd_loader.h
 .vscode
 src/resources/filelist.cpp
+sd_loader/sd_loader.bin
+sd_loader/sd_loader.h
