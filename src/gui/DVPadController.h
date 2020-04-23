@@ -1,77 +1,67 @@
-/**
- * This class implements the DPAD mode for the GamePad, allowing you to use the DPAD to move a virtual
- * on screen pointer, rather than using the touch screen. The program will not be able to detect
- * any DPAD/A button presses in this mode, as it may interfere with the user who is navigating the pointer.
+/****************************************************************************
+ * Copyright (C) 2015 Dimok
  *
- * Created by CreeperMario in July 2017 modified by GaryOderNichts in April 2020.
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ****************************************************************************/
+#ifndef DVPAD_CONTROLLER_H_
+#define DVPAD_CONTROLLER_H_
 
-#ifndef DPAD_CONTROLLER_H_
-#define DPAD_CONTROLLER_H_
+#include "ControllerBase.h"
+#include <dynamic_libs/vpad_functions.h>
 
-#include <gui/GuiController.h>
-#include "dynamic_libs/vpad_functions.h"
-#include "DPadControllerBase.h"
-
-class DVPadController : public DPadControllerBase
+class DVPadController : public ControllerBase
 {
 public:
-    
     //!Constructor
-    DVPadController(int channel) : DPadControllerBase(channel)
+    DVPadController(s32 channel)
+        : ControllerBase(channel)
     {
-        memset(&vpad, 0, sizeof(VPADData));
-        memset(&data, 0, sizeof(PadData));
-        memset(&lastData, 0, sizeof(PadData));
-        
-        data.validPointer = false;
+        memset(&vpad, 0, sizeof(vpad));
+        showPointer = false;
     }
-    
+
     //!Destructor
-    virtual ~DVPadController() {}
+    virtual ~DVPadController()  {}
 
-    virtual bool update(int width, int height) override
+    bool update(s32 width, s32 height)
     {
-        DPadControllerBase::update(width, height);
         lastData = data;
-        
-        int vpadError = -1;
-        VPADRead(0, &vpad, 1, &vpadError);
-        
-        if(vpadError == 0)
-        {
-            data.x += vpad.lstick.x * 20;
-            data.y += vpad.lstick.y * 20;
 
-            if (data.x < -(width / 2)) data.x = -(width / 2);
-            if (data.x > (width / 2)) data.x = (width / 2);
-            if (data.y > (height / 2)) data.y = (height / 2);
-            if (data.y < -(height / 2)) data.y = -(height / 2);
-            
+        s32 vpadError = -1;
+        VPADRead(0, &vpad, 1, &vpadError);
+
+        if(vpadError == 0){
             data.buttons_r = vpad.btns_r;
             data.buttons_h = vpad.btns_h;
             data.buttons_d = vpad.btns_d;
+            data.validPointer = !vpad.tpdata.invalid;
+            data.touched = vpad.tpdata.touched;
 
-            if (checkValidPointer())
-            {
-                data.buttons_r &= ~VPAD_BUTTON_A;
-                data.buttons_h &= ~VPAD_BUTTON_A;
-                data.buttons_d &= ~VPAD_BUTTON_A;
-            }
+            VPADGetTPCalibratedPoint(0, &tpCalib, &vpad.tpdata1);
 
-            if(vpad.btns_h & VPAD_BUTTON_A)
-                data.touched = true;
-            else
-                data.touched = false;
+            //! calculate the screen offsets
+            data.x = -(width >> 1) + (s32)(((float)tpCalib.x / 1280.0f) * (float)width);
+            data.y = -(height >> 1) + (s32)(float)height - (((float)tpCalib.y / 720.0f) * (float)height);
 
             return true;
         }
-        
         return false;
     }
-    
+
 private:
     VPADData vpad;
+    VPADTPData tpCalib;
 };
 
 #endif

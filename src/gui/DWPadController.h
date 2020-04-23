@@ -13,14 +13,14 @@
 
 #include <gui/GuiController.h>
 #include "dynamic_libs/padscore_functions.h"
-#include "DPadControllerBase.h"
+#include "ControllerBase.h"
 
-class DWPadController : public DPadControllerBase
+class DWPadController : public ControllerBase
 {
 public:
     
     //!Constructor
-    DWPadController(int channel) : DPadControllerBase(channel)
+    DWPadController(int channel) : ControllerBase(channel)
     {
         memset(&kpadData, 0, sizeof(KPADData));
         
@@ -129,7 +129,7 @@ public:
     
     virtual bool update(int width, int height) override
     {
-        DPadControllerBase::update(width, height);
+        ControllerBase::update(width, height);
 
         lastData = data;
         u32 controller_type;
