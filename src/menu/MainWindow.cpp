@@ -34,7 +34,7 @@ MainWindow::MainWindow(int w, int h)
     append(&bgImageColor);
     append(&bgParticleImg);
 
-    for(int i = 0; i < 5; i++)
+    for(int i = 1; i < 5; i++)
     {
         std::string filename = StringTools::strfmt("player%i_point.png", i);
         pointerImgData[i] = Resources::GetImageData(filename.c_str());
@@ -64,7 +64,7 @@ MainWindow::~MainWindow()
         delete drcElements[0];
         remove(drcElements[0]);
     }
-    for(int i = 0; i < 5; i++)
+    for(int i = 1; i < 5; i++)
     {
         delete pointerImg[i];
         Resources::RemoveImageData(pointerImgData[i]);
@@ -98,7 +98,7 @@ void MainWindow::updateEffects()
     }
 }
 
-void MainWindow::update(GuiController *controller)
+void MainWindow::update(ControllerBase *controller)
 {
     //! dont read behind the initial elements in case one was added
     //uint32_t tvSize = tvElements.size();
@@ -137,7 +137,7 @@ void MainWindow::update(GuiController *controller)
 //        }
 //    }
 
-    if(controller->data.validPointer)
+    if(controller->showPointer)
     {
         int wpadIdx = controller->chanIdx;
         float posX = controller->data.x;
@@ -153,13 +153,6 @@ void MainWindow::drawDrc(CVideo *video)
     for(uint32_t i = 0; i < drcElements.size(); ++i)
     {
         drcElements[i]->draw(video);
-    }
-
-    if(pointerValid[0])
-    {
-        pointerImg[0]->setAlpha(1.0f);
-        pointerImg[0]->draw(video);
-        pointerImg[0]->setAlpha(1.0f);
     }
     
     for(int i = 1; i < 5; i++)
@@ -180,14 +173,6 @@ void MainWindow::drawTv(CVideo *video)
         tvElements[i]->draw(video);
     }
 
-    if(pointerValid[0])
-    {
-        pointerImg[0]->setAlpha(0.5f);
-        pointerImg[0]->draw(video);
-        pointerImg[0]->setAlpha(1.0f);
-        pointerValid[0] = false;
-    }
-    
     for(int i = 1; i < 5; i++)
     {
         if(pointerValid[i])

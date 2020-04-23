@@ -50,6 +50,8 @@ private:
     int searchSelectedButton();
     void OnUpDownClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger);
 
+    void OnAClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger);
+
     void OnCloseTcpReceiverFinish(GuiElement *element);
     void OnTcpReceiveStart(GuiElement *element, uint32_t ip);
     void OnTcpReceiveFinish(GuiElement *element, uint32_t ip, int result);
@@ -65,6 +67,7 @@ private:
     GuiButton arrowRightButton;
     GuiButton arrowLeftButton;
     GuiButton updownButtons;
+    GuiButton aButton;
     GuiText hblVersionText;
 
     typedef struct
@@ -86,6 +89,7 @@ private:
     GuiTrigger buttonRTrigger;
     GuiTrigger buttonUpTrigger;
     GuiTrigger buttonDownTrigger;
+    GuiTrigger buttonATrigger;
     int listOffset;
     int currentLeftPosition;
     int targetLeftPosition;
