@@ -95,6 +95,8 @@ private:
     int targetLeftPosition;
 
     TcpReceiver tcpReceiver;
+
+    bool inputDisabled;
 };
 
 #endif //_HOMEBREW_WINDOW_H_
