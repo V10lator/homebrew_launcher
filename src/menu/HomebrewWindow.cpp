@@ -184,6 +184,8 @@ HomebrewWindow::HomebrewWindow(int w, int h)
     aButton.setTrigger(&buttonATrigger);
     aButton.clicked.connect(this, &HomebrewWindow::OnAClick);
     append(&aButton);
+
+    inputDisabled = false;
 }
 
 HomebrewWindow::~HomebrewWindow()
@@ -223,6 +225,8 @@ void HomebrewWindow::OnCloseEffectFinish(GuiElement *element)
     {
         homebrewButtons[i].button->clearState(GuiElement::STATE_DISABLED);
     }
+
+    inputDisabled = false;
 }
 
 void HomebrewWindow::OnLaunchBoxCloseClick(GuiElement *element)
@@ -254,6 +258,7 @@ void HomebrewWindow::OnHomebrewButtonClick(GuiButton *button, const GuiControlle
             launchBox->backButtonClicked.connect(this, &HomebrewWindow::OnLaunchBoxCloseClick);
             append(launchBox);
             disableButtons = true;
+            inputDisabled = true;
             break;
         }
     }
@@ -270,6 +275,9 @@ void HomebrewWindow::OnHomebrewButtonClick(GuiButton *button, const GuiControlle
 
 void HomebrewWindow::OnLeftArrowClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
 {
+    if (inputDisabled)
+        return;
+
     if(listOffset > 0)
     {
         listOffset--;
@@ -283,6 +291,9 @@ void HomebrewWindow::OnLeftArrowClick(GuiButton *button, const GuiController *co
 
 void HomebrewWindow::OnRightArrowClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
 {
+    if (inputDisabled)
+        return;
+
     if((listOffset * MAX_BUTTONS_ON_PAGE) < (int)homebrewButtons.size())
     {
         listOffset++;
@@ -315,6 +326,9 @@ int HomebrewWindow::searchSelectedButton()
 
 void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
 {
+    if (inputDisabled)
+        return;
+
     int index = searchSelectedButton();
 
     int min = listOffset * MAX_BUTTONS_ON_PAGE;
@@ -356,6 +370,9 @@ void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *contr
 
 void HomebrewWindow::OnAClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
 {
+    if (inputDisabled)
+        return;
+
     // If the controller has a pointer on screen
     if(((ControllerBase*) controller)->showPointer)
         return;
