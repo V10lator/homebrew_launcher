@@ -215,9 +215,9 @@ void HomebrewLaunchWindow::OnLoadButtonClick(GuiButton *button, const GuiControl
 
 int HomebrewLaunchWindow::findSelectedButton()
 {
-    if (loadBtn.getState() == STATE_SELECTED)
+    if (loadBtn.isStateSet(STATE_SELECTED))
         return 0;
-    if (backBtn.getState() == STATE_SELECTED)
+    if (backBtn.isStateSet(STATE_SELECTED))
         return 1;
 
     return -1;

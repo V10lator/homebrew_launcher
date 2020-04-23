@@ -24,3 +24,5 @@
 /channel/code/*.rpx
 .vscode
 src/resources/filelist.cpp
+sd_loader/sd_loader.bin
+sd_loader/sd_loader.h
