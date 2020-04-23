@@ -319,7 +319,7 @@ int HomebrewWindow::searchSelectedButton()
     int index = -1;
     for (int i = min; i < max && index < 0; i++)
     {
-        if(homebrewButtons[i].button->getState() == STATE_SELECTED)
+        if(homebrewButtons[i].button->isStateSet(STATE_SELECTED))
             index = i;
     }
 
