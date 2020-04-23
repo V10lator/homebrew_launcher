@@ -56,6 +56,11 @@ private:
     void OnTcpReceiveStart(GuiElement *element, uint32_t ip);
     void OnTcpReceiveFinish(GuiElement *element, uint32_t ip, int result);
 
+    void LaunchBoxSelected(const GuiController* controller)
+    {
+        selected(controller);
+    }
+
     GuiSound *buttonClickSound;
     GuiImageData * homebrewButtonImgData;
 

@@ -257,6 +257,7 @@ void HomebrewWindow::OnHomebrewButtonClick(GuiButton *button, const GuiControlle
             launchBox->setPosition(0.0f, 30.0f);
             launchBox->effectFinished.connect(this, &HomebrewWindow::OnOpenEffectFinish);
             launchBox->backButtonClicked.connect(this, &HomebrewWindow::OnLaunchBoxCloseClick);
+            launchBox->selected.connect(this, &HomebrewWindow::LaunchBoxSelected);
             append(launchBox);
             disableButtons = true;
             inputDisabled = true;

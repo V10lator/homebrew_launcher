@@ -31,6 +31,7 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     , backgroundImgData(Resources::GetImageData("launchMenuBox.png"))
     , backgroundImg(backgroundImgData)
     , buttonImgData(Resources::GetImageData("button.png"))
+    , buttonSelectedImgData(Resources::GetImageData("buttonSelected.png"))
     , iconImage(iconImgData)
     , titleText((char*)NULL, 42, glm::vec4(1.0f))
     , versionText("Version:", 32, glm::vec4(1.0f))
@@ -40,12 +41,20 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     , descriptionText((char*)NULL, 28, glm::vec4(1.0f))
     , loadBtnLabel("Load", 32, glm::vec4(1.0f))
     , loadImg(buttonImgData)
+    , loadSelectedImg(buttonSelectedImgData)
     , loadBtn(loadImg.getWidth(), loadImg.getHeight())
     , backBtnLabel("Back", 32, glm::vec4(1.0f))
     , backImg(buttonImgData)
+    , backSelectedImg(buttonSelectedImgData)
     , backBtn(backImg.getWidth(), backImg.getHeight())
     , touchTrigger(GuiTrigger::CHANNEL_1, GuiTrigger::VPAD_TOUCH)
     , wpadTouchTrigger(GuiTrigger::CHANNEL_2 | GuiTrigger::CHANNEL_3 | GuiTrigger::CHANNEL_4 | GuiTrigger::CHANNEL_5, GuiTrigger::BUTTON_A)
+    , buttonRightTrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_RIGHT, true)
+    , buttonLeftTrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_LEFT, true)
+    , buttonATrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_A, true)
+    , buttonBTrigger(GuiTrigger::CHANNEL_ALL, GuiTrigger::BUTTON_B, true)
+    , dpadButtons(0, 0)
+    , buttons (0, 0)
     , homebrewLaunchPath(launchPath)
 {
     width = backgroundImg.getWidth();
@@ -120,6 +129,8 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     loadBtn.setTrigger(&wpadTouchTrigger);
     loadBtn.setEffectGrow();
     loadBtn.setSoundClick(buttonClickSound);
+    loadBtn.setSelectable(true);
+    loadBtn.setImageOver(&loadSelectedImg);
     loadBtn.clicked.connect(this, &HomebrewLaunchWindow::OnLoadButtonClick);
     append(&loadBtn);
 
@@ -133,8 +144,20 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     backBtn.setTrigger(&wpadTouchTrigger);
     backBtn.setEffectGrow();
     backBtn.setSoundClick(buttonClickSound);
+    backBtn.setSelectable(true);
+    backBtn.setImageOver(&backSelectedImg);
     backBtn.clicked.connect(this, &HomebrewLaunchWindow::OnBackButtonClick);
     append(&backBtn);
+
+    dpadButtons.setTrigger(&buttonRightTrigger);
+    dpadButtons.setTrigger(&buttonLeftTrigger);
+    dpadButtons.clicked.connect(this, &HomebrewLaunchWindow::OnDpadClick);
+    append(&dpadButtons);
+
+    buttons.setTrigger(&buttonATrigger);
+    buttons.setTrigger(&buttonBTrigger);
+    buttons.clicked.connect(this, &HomebrewLaunchWindow::OnButtonClick);
+    append(&buttons);
 }
 
 HomebrewLaunchWindow::~HomebrewLaunchWindow()
@@ -142,6 +165,7 @@ HomebrewLaunchWindow::~HomebrewLaunchWindow()
     Resources::RemoveSound(buttonClickSound);
     Resources::RemoveImageData(backgroundImgData);
     Resources::RemoveImageData(buttonImgData);
+    Resources::RemoveImageData(buttonSelectedImgData);
 }
 
 void HomebrewLaunchWindow::OnOpenEffectFinish(GuiElement *element)
@@ -173,9 +197,14 @@ void HomebrewLaunchWindow::OnFileLoadFinish(GuiElement *element, const std::stri
     }
 }
 
-
 void HomebrewLaunchWindow::OnLoadButtonClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
 {
+    // If there is no pointer dont click
+    if (trigger == &wpadTouchTrigger && !((ControllerBase*) controller)->showPointer)
+    {
+        return;
+    }
+
     backBtn.setState(GuiElement::STATE_DISABLED);
     loadBtn.setState(GuiElement::STATE_DISABLED);
 
@@ -184,4 +213,71 @@ void HomebrewLaunchWindow::OnLoadButtonClick(GuiButton *button, const GuiControl
     loader->effectFinished.connect(this, &HomebrewLaunchWindow::OnOpenEffectFinish);
     loader->asyncLoadFinished.connect(this, &HomebrewLaunchWindow::OnFileLoadFinish);
     append(loader);
+}
+
+int HomebrewLaunchWindow::findSelectedButton()
+{
+    if (loadBtn.getState() == STATE_SELECTED)
+        return 0;
+    if (backBtn.getState() == STATE_SELECTED)
+        return 1;
+
+    return -1;
+}
+
+void HomebrewLaunchWindow::OnDpadClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
+{
+    selected(controller);
+
+    int index = findSelectedButton();
+
+    if (trigger == &buttonLeftTrigger)
+    {
+        if (index < 0)
+        {
+            loadBtn.setState(STATE_SELECTED);
+        }
+        else if (index == 1)
+        {
+            backBtn.clearState(STATE_SELECTED);
+            loadBtn.setState(STATE_SELECTED);
+        }
+    }
+    
+    if (trigger == &buttonRightTrigger)
+    {
+        if (index < 0)
+        {
+            loadBtn.setState(STATE_SELECTED);
+        }
+        else if (index == 0)
+        {
+            backBtn.setState(STATE_SELECTED);
+            loadBtn.clearState(STATE_SELECTED);
+        }
+    }
+}
+
+void HomebrewLaunchWindow::OnButtonClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
+{
+    if (trigger == &buttonBTrigger)
+        backButtonClicked(this);
+
+    if (trigger == &buttonATrigger)
+    {
+        // If the controller has a pointer on screen
+        if(((ControllerBase*) controller)->showPointer)
+            return;
+
+        int index = findSelectedButton();
+        if (index == 0)
+        {
+            loadBtn.clicked(&loadBtn, controller, trigger);
+        }
+        else if (index == 1)
+        {
+            backButtonClicked(this);
+        }
+        
+    }
 }
