@@ -155,6 +155,8 @@ public:
             }
             else
             {
+                data.validPointer = true;
+
                 data.x += kpadData.nunchuck.stick_x * 20;
                 data.y += kpadData.nunchuck.stick_y * 20;
             }
@@ -165,6 +167,8 @@ public:
         }
         else
         {
+            data.validPointer = true;
+
             data.x += kpadData.classic.lstick_x * 20;
             data.y += kpadData.classic.lstick_y * 20;
 
