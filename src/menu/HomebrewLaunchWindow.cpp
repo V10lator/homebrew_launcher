@@ -131,6 +131,8 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     loadBtn.setSoundClick(buttonClickSound);
     loadBtn.setSelectable(true);
     loadBtn.setImageOver(&loadSelectedImg);
+    loadBtn.setdrawOverOnlyWhenSelected(true);
+    backBtn.setEffectGrow();
     loadBtn.clicked.connect(this, &HomebrewLaunchWindow::OnLoadButtonClick);
     append(&loadBtn);
 
@@ -146,6 +148,8 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     backBtn.setSoundClick(buttonClickSound);
     backBtn.setSelectable(true);
     backBtn.setImageOver(&backSelectedImg);
+    backBtn.setdrawOverOnlyWhenSelected(true);
+    backBtn.setEffectGrow();
     backBtn.clicked.connect(this, &HomebrewLaunchWindow::OnBackButtonClick);
     append(&backBtn);
 
