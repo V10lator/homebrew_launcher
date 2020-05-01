@@ -16,6 +16,7 @@
  ****************************************************************************/
 #include "ProgressWindow.h"
 #include "video/CVideo.h"
+#include "resources/Resources.h"
 
 ProgressWindow::ProgressWindow(const std::string & title)
     : GuiFrame(0, 0)
@@ -66,7 +67,7 @@ void ProgressWindow::setTitle(const std::string & title)
     titleMutex.unlock();
 }
 
-void ProgressWindow::setProgress(f32 percent)
+void ProgressWindow::setProgress(float percent)
 {
     progressImageColored.setSize(percent * 0.01f * progressImageBlack.getWidth(), progressImageColored.getHeight());
 }

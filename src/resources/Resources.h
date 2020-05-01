@@ -13,8 +13,8 @@ class Resources
 public:
     static void Clear();
     static bool LoadFiles(const char * path);
-    static const u8 * GetFile(const char * filename);
-    static u32 GetFileSize(const char * filename);
+    static const uint8_t * GetFile(const char * filename);
+    static uint32_t GetFileSize(const char * filename);
 
     static GuiImageData * GetImageData(const char * filename);
     static void RemoveImageData(GuiImageData * image);

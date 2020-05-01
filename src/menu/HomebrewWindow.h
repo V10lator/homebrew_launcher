@@ -38,8 +38,8 @@ private:
     void OnRightArrowClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger);
 
     void OnCloseTcpReceiverFinish(GuiElement *element);
-    void OnTcpReceiveStart(GuiElement *element, u32 ip);
-    void OnTcpReceiveFinish(GuiElement *element, u32 ip, int result);
+    void OnTcpReceiveStart(GuiElement *element, uint32_t ip);
+    void OnTcpReceiveFinish(GuiElement *element, uint32_t ip, int result);
 
     GuiSound *buttonClickSound;
     GuiImageData * homebrewButtonImgData;

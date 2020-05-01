@@ -22,6 +22,8 @@
 #include "utils/HomebrewXML.h"
 #include "utils/utils.h"
 #include "Application.h"
+#include "resources/Resources.h"
+#include "system/AsyncDeleter.h"
 
 HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiImageData * iconImgData)
     : GuiFrame(0, 0)

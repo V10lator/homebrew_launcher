@@ -40,7 +40,7 @@ WavDecoder::WavDecoder(const char * filepath)
 	OpenFile();
 }
 
-WavDecoder::WavDecoder(const u8 * snd, int len)
+WavDecoder::WavDecoder(const uint8_t * snd, int len)
 	: SoundDecoder(snd, len)
 {
 	SoundType = SOUND_WAV;
@@ -65,8 +65,8 @@ void WavDecoder::OpenFile()
 	memset(&Header, 0, sizeof(SWaveHdr));
 	memset(&FmtChunk, 0, sizeof(SWaveFmtChunk));
 
-	file_fd->read((u8 *) &Header, sizeof(SWaveHdr));
-	file_fd->read((u8 *) &FmtChunk, sizeof(SWaveFmtChunk));
+	file_fd->read((uint8_t *) &Header, sizeof(SWaveHdr));
+	file_fd->read((uint8_t *) &FmtChunk, sizeof(SWaveFmtChunk));
 
 	if (Header.magicRIFF != 0x52494646) // 'RIFF'
 	{
@@ -87,13 +87,13 @@ void WavDecoder::OpenFile()
 	DataOffset = sizeof(SWaveHdr)+le32(FmtChunk.size)+8;
 	file_fd->seek(DataOffset, SEEK_SET);
 	SWaveChunk DataChunk;
-	file_fd->read((u8 *) &DataChunk, sizeof(SWaveChunk));
+	file_fd->read((uint8_t *) &DataChunk, sizeof(SWaveChunk));
 
 	while(DataChunk.magicDATA != 0x64617461) // 'data'
 	{
 		DataOffset += 8+le32(DataChunk.size);
 		file_fd->seek(DataOffset, SEEK_SET);
-		int ret = file_fd->read((u8 *) &DataChunk, sizeof(SWaveChunk));
+		int ret = file_fd->read((uint8_t *) &DataChunk, sizeof(SWaveChunk));
 		if(ret <= 0)
 		{
 			CloseFile();
@@ -124,7 +124,7 @@ void WavDecoder::CloseFile()
 	file_fd = NULL;
 }
 
-int WavDecoder::Read(u8 * buffer, int buffer_size, int pos)
+int WavDecoder::Read(uint8_t * buffer, int buffer_size, int pos)
 {
 	if(!file_fd)
 		return -1;
@@ -144,8 +144,8 @@ int WavDecoder::Read(u8 * buffer, int buffer_size, int pos)
 		{
 			read &= ~0x0001;
 
-			for (u32 i = 0; i < (u32) (read / sizeof (u16)); ++i)
-				((u16 *) buffer)[i] = le16(((u16 *) buffer)[i]);
+			for (uint32_t i = 0; i < (uint32_t) (read / sizeof (uint16_t)); ++i)
+				((uint16_t *) buffer)[i] = le16(((uint16_t *) buffer)[i]);
 		}
 		CurPos += read;
 	}

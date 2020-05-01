@@ -45,11 +45,11 @@ public:
 	//!\param path Path from where to load the filelist of all files
 	//!\param filter A fileext that needs to be filtered
 	//!\param flags search/filter flags from the enum
-	DirList(const std::string & path, const char *filter = NULL, u32 flags = Files | Dirs, u32 maxDepth = 0xffffffff);
+	DirList(const std::string & path, const char *filter = NULL, uint32_t flags = Files | Dirs, uint32_t maxDepth = 0xffffffff);
 	//!Destructor
 	virtual ~DirList();
 	//! Load all the files from a directory
-	bool LoadPath(const std::string & path, const char *filter = NULL, u32 flags = Files | Dirs, u32 maxDepth = 0xffffffff);
+	bool LoadPath(const std::string & path, const char *filter = NULL, uint32_t flags = Files | Dirs, uint32_t maxDepth = 0xffffffff);
 	//! Get a filename of the list
 	//!\param list index
 	const char * GetFilename(int index) const;
@@ -58,7 +58,7 @@ public:
 	const char *GetFilepath(int index) const { if (!valid(index)) return ""; else return FileInfo[index].FilePath; }
 	//! Get the a filesize of the list
 	//!\param list index
-	u64 GetFilesize(int index) const;
+	uint64_t GetFilesize(int index) const;
 	//! Is index a dir or a file
 	//!\param list index
 	bool IsDir(int index) const { if(!valid(index)) return false; return FileInfo[index].isDir; };
@@ -85,10 +85,10 @@ protected:
 	//! Clear the list
 	void ClearList();
 	//! Check if valid pos is requested
-	inline bool valid(u32 pos) const { return (pos < FileInfo.size()); };
+	inline bool valid(uint32_t pos) const { return (pos < FileInfo.size()); };
 
-	u32 Flags;
-	u32 Depth;
+	uint32_t Flags;
+	uint32_t Depth;
 	const char *Filter;
 	std::vector<DirEntry> FileInfo;
 };

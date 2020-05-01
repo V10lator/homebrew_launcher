@@ -27,9 +27,9 @@ private:
     Texture2DShader();
     virtual ~Texture2DShader();
 
-    static const u32 cuAttributeCount = 2;
-    static const u32 ciPositionVtxsSize = 4 * cuVertexAttrSize;
-    static const u32 ciTexCoordsVtxsSize = 4 * cuTexCoordAttrSize;
+    static const uint32_t cuAttributeCount = 2;
+    static const uint32_t ciPositionVtxsSize = 4 * cuVertexAttrSize;
+    static const uint32_t ciTexCoordsVtxsSize = 4 * cuTexCoordAttrSize;
 
     static Texture2DShader *shaderInstance;
 
@@ -37,17 +37,17 @@ private:
     VertexShader vertexShader;
     PixelShader pixelShader;
 
-    f32 *posVtxs;
-    f32 *texCoords;
+    float *posVtxs;
+    float *texCoords;
 
-    u32 angleLocation;
-    u32 offsetLocation;
-    u32 scaleLocation;
-    u32 colorIntensityLocation;
-    u32 blurLocation;
-    u32 samplerLocation;
-    u32 positionLocation;
-    u32 texCoordLocation;
+    uint32_t angleLocation;
+    uint32_t offsetLocation;
+    uint32_t scaleLocation;
+    uint32_t colorIntensityLocation;
+    uint32_t blurLocation;
+    uint32_t samplerLocation;
+    uint32_t positionLocation;
+    uint32_t texCoordLocation;
 public:
     static Texture2DShader *instance() {
         if(!shaderInstance) {
@@ -69,7 +69,7 @@ public:
         pixelShader.setShader();
     }
 
-    void setAttributeBuffer(const f32 * texCoords_in = NULL, const f32 * posVtxs_in = NULL, const u32 & vtxCount = 0) const
+    void setAttributeBuffer(const float * texCoords_in = NULL, const float * posVtxs_in = NULL, const uint32_t & vtxCount = 0) const
     {
         if(posVtxs_in && texCoords_in && vtxCount)
         {

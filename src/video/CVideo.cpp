@@ -23,7 +23,7 @@
 #include "shaders/Shader3D.h"
 #include "shaders/FXAAShader.h"
 
-CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
+CVideo::CVideo(int32_t forceTvScanMode, int32_t forceDrcScanMode)
 {
     tvEnabled = false;
     drcEnabled = false;
@@ -32,9 +32,9 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
     gx2CommandBuffer = MEM2_alloc(GX2_COMMAND_BUFFER_SIZE, 0x40);
 
     //! initialize GX2 command buffer
-    u32 gx2_init_attributes[9];
+    uint32_t gx2_init_attributes[9];
     gx2_init_attributes[0] = GX2_INIT_CMD_BUF_BASE;
-    gx2_init_attributes[1] = (u32)gx2CommandBuffer;
+    gx2_init_attributes[1] = (uint32_t)gx2CommandBuffer;
     gx2_init_attributes[2] = GX2_INIT_CMD_BUF_POOL_SIZE;
     gx2_init_attributes[3] = GX2_COMMAND_BUFFER_SIZE;
     gx2_init_attributes[4] = GX2_INIT_ARGC;
@@ -44,15 +44,15 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
     gx2_init_attributes[8] = GX2_INIT_END;
     GX2Init(gx2_init_attributes);
 
-    u32 scanBufferSize = 0;
-    u32 scaleNeeded = 0;
+    uint32_t scanBufferSize = 0;
+    uint32_t scaleNeeded = 0;
 
-    s32 tvScanMode = ((forceTvScanMode >= 0) ? forceTvScanMode : (s32)GX2GetSystemTVScanMode());
-    s32 drcScanMode = ((forceDrcScanMode >= 0) ? forceDrcScanMode : (s32)GX2GetSystemDRCScanMode());
+    int32_t tvScanMode = ((forceTvScanMode >= 0) ? forceTvScanMode : (int32_t)GX2GetSystemTVScanMode());
+    int32_t drcScanMode = ((forceDrcScanMode >= 0) ? forceDrcScanMode : (int32_t)GX2GetSystemDRCScanMode());
 
-    s32 tvRenderMode;
-    u32 tvWidth = 0;
-    u32 tvHeight = 0;
+    int32_t tvRenderMode;
+    uint32_t tvWidth = 0;
+    uint32_t tvHeight = 0;
 
     switch(tvScanMode)
     {
@@ -76,12 +76,12 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
         break;
     }
 
-    s32 tvAAMode = GX2_AA_MODE1X;
-    s32 drcAAMode = GX2_AA_MODE4X;
+    int32_t tvAAMode = GX2_AA_MODE1X;
+    int32_t drcAAMode = GX2_AA_MODE4X;
 
     //! calculate the scale factor for later texture resize
-    widthScaleFactor = 1.0f / (f32)tvWidth;
-    heightScaleFactor = 1.0f / (f32)tvHeight;
+    widthScaleFactor = 1.0f / (float)tvWidth;
+    heightScaleFactor = 1.0f / (float)tvHeight;
     depthScaleFactor = widthScaleFactor;
 
     //! calculate the size needed for the TV scan buffer and allocate the buffer from bucket memory
@@ -105,7 +105,7 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
     //! this should be ok for our purpose i guess
 
     //! Setup TV depth buffer (can be the same for both if rendered one after another)
-    u32 size, align;
+    uint32_t size, align;
     GX2InitDepthBuffer(&tvDepthBuffer, GX2_SURFACE_DIM_TEXTURE_2D, tvColorBuffer.surface.width, tvColorBuffer.surface.height, 1, GX2_SURFACE_FORMAT_FLOAT_R32, (GX2AAMode)tvAAMode);
     tvDepthBuffer.surface.image = MEM1_alloc(tvDepthBuffer.surface.imageSize, tvDepthBuffer.surface.alignment);
     GX2Invalidate(GX2_INVALIDATE_MODE_CPU, tvDepthBuffer.surface.image, tvDepthBuffer.surface.imageSize);
@@ -136,7 +136,7 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
     //! allocate auxilary buffer last as there might not be enough MEM1 left for other stuff after that
     if (tvColorBuffer.surface.aa)
     {
-        u32 auxSize, auxAlign;
+        uint32_t auxSize, auxAlign;
         GX2CalcColorBufferAuxInfo(&tvColorBuffer, &auxSize, &auxAlign);
         tvColorBuffer.aaBuffer = MEM1_alloc(auxSize, auxAlign);
         if(!tvColorBuffer.aaBuffer)
@@ -149,7 +149,7 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
 
     if (drcColorBuffer.surface.aa)
     {
-        u32 auxSize, auxAlign;
+        uint32_t auxSize, auxAlign;
         GX2CalcColorBufferAuxInfo(&drcColorBuffer, &auxSize, &auxAlign);
         drcColorBuffer.aaBuffer = MEM1_alloc(auxSize, auxAlign);
         if(!drcColorBuffer.aaBuffer)
@@ -228,14 +228,14 @@ CVideo::~CVideo()
     //! free aux buffer
     if(tvColorBuffer.aaBuffer)
     {
-        if(((u32)tvColorBuffer.aaBuffer & 0xF0000000) == 0xF0000000)
+        if(((uint32_t)tvColorBuffer.aaBuffer & 0xF0000000) == 0xF0000000)
             MEM1_free(tvColorBuffer.aaBuffer);
         else
             MEM2_free(tvColorBuffer.aaBuffer);
     }
     if(drcColorBuffer.aaBuffer)
     {
-        if(((u32)drcColorBuffer.aaBuffer & 0xF0000000) == 0xF0000000)
+        if(((uint32_t)drcColorBuffer.aaBuffer & 0xF0000000) == 0xF0000000)
             MEM1_free(drcColorBuffer.aaBuffer);
         else
             MEM2_free(drcColorBuffer.aaBuffer);

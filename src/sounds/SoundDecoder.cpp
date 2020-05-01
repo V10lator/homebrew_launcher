@@ -20,8 +20,8 @@
 #include <coreinit/cache.h>
 #include "SoundDecoder.hpp"
 
-static const u32 FixedPointShift = 15;
-static const u32 FixedPointScale = 1 << FixedPointShift;
+static const uint32_t FixedPointShift = 15;
+static const uint32_t FixedPointScale = 1 << FixedPointShift;
 
 SoundDecoder::SoundDecoder()
 {
@@ -35,7 +35,7 @@ SoundDecoder::SoundDecoder(const std::string & filepath)
 	Init();
 }
 
-SoundDecoder::SoundDecoder(const u8 * buffer, int size)
+SoundDecoder::SoundDecoder(const uint8_t * buffer, int size)
 {
 	file_fd = new CFile(buffer, size);
 	Init();
@@ -86,7 +86,7 @@ int SoundDecoder::Rewind()
 	return 0;
 }
 
-int SoundDecoder::Read(u8 * buffer, int buffer_size, int pos)
+int SoundDecoder::Read(uint8_t * buffer, int buffer_size, int pos)
 {
 	int ret = file_fd->read(buffer, buffer_size);
 	CurPos += ret;
@@ -97,11 +97,11 @@ int SoundDecoder::Read(u8 * buffer, int buffer_size, int pos)
 void SoundDecoder::EnableUpsample(void)
 {
 	if(   (ResampleBuffer == NULL)
-	   && IsStereo() && Is16Bit()
+	   && IsStereo() && Iint16_tBit()
 	   && SampleRate != 32000
 	   && SampleRate != 48000)
 	{
-		ResampleBuffer = (u8*)memalign(32, SoundBlockSize);
+		ResampleBuffer = (uint8_t*)memalign(32, SoundBlockSize);
 		ResampleRatio =  ( FixedPointScale * SampleRate ) / 48000;
 		SoundBlockSize = ( SoundBlockSize * ResampleRatio ) / FixedPointScale;
 		SoundBlockSize &= ~0x03;
@@ -110,11 +110,11 @@ void SoundDecoder::EnableUpsample(void)
 	}
 }
 
-void SoundDecoder::Upsample(s16 *src, s16 *dst, u32 nr_src_samples, u32 nr_dst_samples)
+void SoundDecoder::Upsample(int16_t *src, int16_t *dst, uint32_t nr_src_samples, uint32_t nr_dst_samples)
 {
 	int timer = 0;
 
-	for(u32 i = 0, n = 0; i < nr_dst_samples; i += 2)
+	for(uint32_t i = 0, n = 0; i < nr_dst_samples; i += 2)
 	{
 		if((n+3) < nr_src_samples) {
 			// simple fixed point linear interpolation
@@ -141,7 +141,7 @@ void SoundDecoder::Decode()
 		return;
 
 	// check if we are not at the pre-last buffer (last buffer is playing)
-	u16 whichPlaying = SoundBuffer.Which();
+	uint16_t whichPlaying = SoundBuffer.Which();
 	if(	   ((whichPlaying == 0) && (whichLoad == SoundBuffer.Size()-2))
 		|| ((whichPlaying == 1) && (whichLoad == SoundBuffer.Size()-1))
         || (whichLoad == (whichPlaying-2)))
@@ -152,7 +152,7 @@ void SoundDecoder::Decode()
 	Decoding = true;
 
 	int done  = 0;
-	u8 * write_buf = SoundBuffer.GetBuffer(whichLoad);
+	uint8_t * write_buf = SoundBuffer.GetBuffer(whichLoad);
 	if(!write_buf)
 	{
 		ExitRequested = true;
@@ -194,14 +194,14 @@ void SoundDecoder::Decode()
 			int src_samples = done >> 1;
 			int dest_samples = ( src_samples * FixedPointScale ) / ResampleRatio;
 			dest_samples &= ~0x01;
-			Upsample((s16*)ResampleBuffer, (s16*)write_buf, src_samples, dest_samples);
+			Upsample((int16_t*)ResampleBuffer, (int16_t*)write_buf, src_samples, dest_samples);
 			done = dest_samples << 1;
 		}
 
 		//! TODO: remove this later and add STEREO support with two voices, for now we convert to MONO
 		if(IsStereo())
 		{
-            s16* monoBuf = (s16*)write_buf;
+            int16_t* monoBuf = (int16_t*)write_buf;
 			done = done >> 1;
 
             for(int i = 0; i < done; i++)

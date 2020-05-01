@@ -32,10 +32,10 @@ class OggDecoder : public SoundDecoder
 {
 	public:
 		OggDecoder(const char * filepath);
-		OggDecoder(const u8 * snd, int len);
+		OggDecoder(const uint8_t * snd, int len);
 		virtual ~OggDecoder();
 		int Rewind();
-		int Read(u8 * buffer, int buffer_size, int pos);
+		int Read(uint8_t * buffer, int buffer_size, int pos);
 	protected:
 		void OpenFile();
 		OggVorbis_File ogg_file;

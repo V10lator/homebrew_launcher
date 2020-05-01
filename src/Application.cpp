@@ -27,6 +27,7 @@
 #include "sounds/SoundHandler.hpp"
 #include "system/memory.h"
 #include "utils/logger.h"
+#include "system/AsyncDeleter.h"
 
 Application *Application::applicationInstance = NULL;
 bool Application::exitApplication = false;

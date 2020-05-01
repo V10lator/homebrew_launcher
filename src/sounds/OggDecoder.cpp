@@ -29,12 +29,12 @@
 
 static int ogg_read(void * punt, int bytes, int blocks, int *f)
 {
-	return ((CFile *) f)->read((u8 *) punt, bytes*blocks);
+	return ((CFile *) f)->read((uint8_t *) punt, bytes*blocks);
 }
 
 static int ogg_seek(int *f, ogg_int64_t offset, int mode)
 {
-	return ((CFile *) f)->seek((u64) offset, mode);
+	return ((CFile *) f)->seek((uint64_t) offset, mode);
 }
 
 static int ogg_close(int *f)
@@ -66,7 +66,7 @@ OggDecoder::OggDecoder(const char * filepath)
 	OpenFile();
 }
 
-OggDecoder::OggDecoder(const u8 * snd, int len)
+OggDecoder::OggDecoder(const uint8_t * snd, int len)
 	: SoundDecoder(snd, len)
 {
 	SoundType = SOUND_OGG;
@@ -121,7 +121,7 @@ int OggDecoder::Rewind()
 	return ret;
 }
 
-int OggDecoder::Read(u8 * buffer, int buffer_size, int pos)
+int OggDecoder::Read(uint8_t * buffer, int buffer_size, int pos)
 {
 	if(!file_fd)
 		return -1;

@@ -1,13 +1,15 @@
 #include <string.h>
 #include <coreinit/cache.h>
 #include <coreinit/memory.h>
+#include <coreinit/memorymap.h>
 #include "common/common.h"
 #include "system/memory_area_table.h"
 #include "utils/utils.h"
 #include "utils/logger.h"
+#include "utils/utils.h"
 
 static s_mem_area *mem_map = 0;
-static u32 mapPosition = 0;
+static uint32_t mapPosition = 0;
 
 void HomebrewInitMemory(void)
 {
@@ -22,15 +24,15 @@ void HomebrewInitMemory(void)
     RPX_MAX_CODE_SIZE = 0x03000000;
 }
 
-int HomebrewCopyMemory(u8 *address, u32 bytes)
+int HomebrewCopyMemory(uint8_t *address, uint32_t bytes)
 {
     if(ELF_DATA_SIZE == 0)
     {
         // check if we load an RPX or an ELF
-        if(*(u16*)&address[7] != 0xCAFE)
+        if(*(uint16_t*)&address[7] != 0xCAFE)
         {
             // assume ELF
-            ELF_DATA_ADDR = (u32)APP_BASE_MEM;
+            ELF_DATA_ADDR = (uint32_t)APP_BASE_MEM;
         }
         else
         {
@@ -42,7 +44,7 @@ int HomebrewCopyMemory(u8 *address, u32 bytes)
     //! if we load an ELF file
     if(ELF_DATA_ADDR < 0x01000000)
     {
-        u32 targetAddress = ELF_DATA_ADDR + ELF_DATA_SIZE;
+        uint32_t targetAddress = ELF_DATA_ADDR + ELF_DATA_SIZE;
         if((targetAddress + bytes) > 0x01000000)
             return -1;
 
@@ -53,8 +55,8 @@ int HomebrewCopyMemory(u8 *address, u32 bytes)
     {
         DCFlushRange(address, bytes);
 
-        u32 done = 0;
-        u32 addressPhysical = (u32)OSEffectiveToPhysical(address);
+        uint32_t done = 0;
+        uint32_t addressPhysical = OSEffectiveToPhysical((uint32_t) address);
 
         while((done < bytes) && mem_map)
         {
@@ -67,7 +69,7 @@ int HomebrewCopyMemory(u8 *address, u32 bytes)
                  mapPosition = 0;
             }
 
-            u32 blockSize = bytes - done;
+            uint32_t blockSize = bytes - done;
             if((mapPosition + blockSize) > mem_map->size)
             {
                 blockSize = mem_map->size - mapPosition;

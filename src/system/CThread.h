@@ -38,7 +38,7 @@ public:
 		//! allocate the thread
 		pThread = (OSThread*)memalign(8, sizeof(OSThread));
 		//! allocate the stack
-		pThreadStack = (u8 *) memalign(0x20, iStackSize);
+		pThreadStack = (uint8_t *) memalign(0x20, iStackSize);
         //! create the thread
 		if(pThread && pThreadStack)
             OSCreateThread(pThread, &CThread::threadCallback, 1, (char*)this, pThreadStack+iStackSize, iStackSize, iPriority, iAttributes);
@@ -111,7 +111,7 @@ private:
 	}
     int iAttributes;
 	OSThread *pThread;
-	u8 *pThreadStack;
+	uint8_t *pThreadStack;
 	Callback pCallback;
 	void *pCallbackArg;
 };

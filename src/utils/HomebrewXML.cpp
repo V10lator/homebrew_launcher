@@ -93,7 +93,7 @@ void HomebrewXML::SetArgument(const char* argument)
 
 	// Check if argument already exists and edit it
 	bool found = false;
-	for(u8 i=0; i < Arguments.size(); i++)
+	for(uint8_t i=0; i < Arguments.size(); i++)
 	{
 		size_t pos = Arguments[i].find(argName);
 		if(pos != std::string::npos)

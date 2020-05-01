@@ -51,13 +51,13 @@ class BufferCircle
 		//!> Switch to next buffer
 		void LoadNext();
 		//!> Get the current buffer
-		u8 * GetBuffer() { return GetBuffer(which); };
+		uint8_t * GetBuffer() { return GetBuffer(which); };
 		//!> Get a buffer at a position
-		u8 * GetBuffer(int pos) { if(!Valid(pos)) return NULL; else return SoundBuffer[pos]; };
+		uint8_t * GetBuffer(int pos) { if(!Valid(pos)) return NULL; else return SoundBuffer[pos]; };
 		//!> Get current buffer size
-		u32 GetBufferSize() { return GetBufferSize(which); };
+		uint32_t GetBufferSize() { return GetBufferSize(which); };
 		//!> Get buffer size at position
-		u32 GetBufferSize(int pos) { if(!Valid(pos)) return 0; else return BufferSize[pos]; };
+		uint32_t GetBufferSize(int pos) { if(!Valid(pos)) return 0; else return BufferSize[pos]; };
 		//!> Is current buffer ready
 		bool IsBufferReady() { return IsBufferReady(which); };
 		//!> Is  a buffer at a position ready
@@ -67,19 +67,19 @@ class BufferCircle
 		//!> Set the buffersize at a position
 		void SetBufferSize(int pos, int size);
 		//!> Get the current position in the circle
-		u16 Which() { return which; };
+		uint16_t Which() { return which; };
 
 		//!> Get the next location
-		inline u16 Next() { return (which+1 >= Size()) ? 0 : which+1; }
-		inline u16 Prev() { if(Size() == 0) return 0; else return ((int)which-1 < 0) ? Size()-1 : which-1; }
+		inline uint16_t Next() { return (which+1 >= Size()) ? 0 : which+1; }
+		inline uint16_t Prev() { if(Size() == 0) return 0; else return ((int)which-1 < 0) ? Size()-1 : which-1; }
 	protected:
 		//!> Check if the position is a valid position in the vector
 		bool Valid(int pos) { return !(pos < 0 || pos >= Size()); };
 
-		u16 which;
-		u32 BufferBlockSize;
-		std::vector<u8 *> SoundBuffer;
-		std::vector<u32> BufferSize;
+		uint16_t which;
+		uint32_t BufferBlockSize;
+		std::vector<uint8_t *> SoundBuffer;
+		std::vector<uint32_t> BufferSize;
 		std::vector<bool> BufferReady;
 };
 

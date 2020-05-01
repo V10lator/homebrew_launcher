@@ -351,7 +351,7 @@ static inline void memoryAddArea(int start, int end, int cur_index)
 /* Create memory areas arrays */
 void memoryInitAreaTable()
 {
-    u32 ApplicationMemoryEnd = (u32)APP_BASE_MEM;
+    uint32_t ApplicationMemoryEnd = (uint32_t)APP_BASE_MEM;
 
     // This one seems to be available on every firmware and therefore its our code area but also our main RPX area behind our code
     // 22876 kB - our application    // ok

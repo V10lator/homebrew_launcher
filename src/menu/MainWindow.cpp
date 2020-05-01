@@ -18,13 +18,13 @@
 #include "Application.h"
 #include "utils/StringTools.h"
 #include "utils/logger.h"
-
+#include "resources/Resources.h"
 
 MainWindow::MainWindow(int w, int h)
     : width(w)
     , height(h)
     , bgImageColor(w, h, (GX2Color){ 0, 0, 0, 0 })
-    , bgParticleImg(w, h, 500)
+    , bgParticleImg(w, h, 500, 0.0f, 30.0f, 0.2f, 0.8f)
     , homebrewWindow(w, h)
 {
     bgImageColor.setImageColor((GX2Color){  79, 153, 239, 255 }, 0);
@@ -72,18 +72,18 @@ MainWindow::~MainWindow()
 void MainWindow::updateEffects()
 {
     //! dont read behind the initial elements in case one was added
-    u32 tvSize = tvElements.size();
-    u32 drcSize = drcElements.size();
+    uint32_t tvSize = tvElements.size();
+    uint32_t drcSize = drcElements.size();
 
-    for(u32 i = 0; (i < drcSize) && (i < drcElements.size()); ++i)
+    for(uint32_t i = 0; (i < drcSize) && (i < drcElements.size()); ++i)
     {
         drcElements[i]->updateEffects();
     }
 
     //! only update TV elements that are not updated yet because they are on DRC
-    for(u32 i = 0; (i < tvSize) && (i < tvElements.size()); ++i)
+    for(uint32_t i = 0; (i < tvSize) && (i < tvElements.size()); ++i)
     {
-        u32 n;
+        uint32_t n;
         for(n = 0; (n < drcSize) && (n < drcElements.size()); n++)
         {
             if(tvElements[i] == drcElements[n])
@@ -99,31 +99,31 @@ void MainWindow::updateEffects()
 void MainWindow::update(GuiController *controller)
 {
     //! dont read behind the initial elements in case one was added
-    //u32 tvSize = tvElements.size();
+    //uint32_t tvSize = tvElements.size();
 
     if(controller->chan & GuiTrigger::CHANNEL_1)
     {
-        u32 drcSize = drcElements.size();
+        uint32_t drcSize = drcElements.size();
 
-        for(u32 i = 0; (i < drcSize) && (i < drcElements.size()); ++i)
+        for(uint32_t i = 0; (i < drcSize) && (i < drcElements.size()); ++i)
         {
             drcElements[i]->update(controller);
         }
     }
     else
     {
-        u32 tvSize = tvElements.size();
+        uint32_t tvSize = tvElements.size();
 
-        for(u32 i = 0; (i < tvSize) && (i < tvElements.size()); ++i)
+        for(uint32_t i = 0; (i < tvSize) && (i < tvElements.size()); ++i)
         {
             tvElements[i]->update(controller);
         }
     }
 
 //    //! only update TV elements that are not updated yet because they are on DRC
-//    for(u32 i = 0; (i < tvSize) && (i < tvElements.size()); ++i)
+//    for(uint32_t i = 0; (i < tvSize) && (i < tvElements.size()); ++i)
 //    {
-//        u32 n;
+//        uint32_t n;
 //        for(n = 0; (n < drcSize) && (n < drcElements.size()); n++)
 //        {
 //            if(tvElements[i] == drcElements[n])
@@ -138,8 +138,8 @@ void MainWindow::update(GuiController *controller)
     if(controller->chanIdx >= 1 && controller->chanIdx <= 4 && controller->data.validPointer)
     {
         int wpadIdx = controller->chanIdx - 1;
-        f32 posX = controller->data.x;
-        f32 posY = controller->data.y;
+        float posX = controller->data.x;
+        float posY = controller->data.y;
         pointerImg[wpadIdx]->setPosition(posX, posY);
         pointerImg[wpadIdx]->setAngle(controller->data.pointerAngle);
         pointerValid[wpadIdx] = true;
@@ -148,7 +148,7 @@ void MainWindow::update(GuiController *controller)
 
 void MainWindow::drawDrc(CVideo *video)
 {
-    for(u32 i = 0; i < drcElements.size(); ++i)
+    for(uint32_t i = 0; i < drcElements.size(); ++i)
     {
         drcElements[i]->draw(video);
     }
@@ -166,7 +166,7 @@ void MainWindow::drawDrc(CVideo *video)
 
 void MainWindow::drawTv(CVideo *video)
 {
-    for(u32 i = 0; i < tvElements.size(); ++i)
+    for(uint32_t i = 0; i < tvElements.size(); ++i)
     {
         tvElements[i]->draw(video);
     }

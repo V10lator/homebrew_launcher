@@ -25,7 +25,6 @@
  ***************************************************************************/
 #include <unistd.h>
 #include <malloc.h>
-#include "dynamic_libs/ax_functions.h"
 #include "common/common.h"
 #include "fs/CFile.hpp"
 #include "SoundHandler.hpp"
@@ -40,7 +39,7 @@ SoundHandler::SoundHandler()
 {
 	Decoding = false;
 	ExitRequested = false;
-	for(u32 i = 0; i < MAX_DECODERS; ++i)
+	for(uint32_t i = 0; i < MAX_DECODERS; ++i)
     {
 		DecoderList[i] = NULL;
         voiceList[i] = NULL;
@@ -72,7 +71,7 @@ void SoundHandler::AddDecoder(int voice, const char * filepath)
 	DecoderList[voice] = GetSoundDecoder(filepath);
 }
 
-void SoundHandler::AddDecoder(int voice, const u8 * snd, int len)
+void SoundHandler::AddDecoder(int voice, const uint8_t * snd, int len)
 {
 	if(voice < 0 || voice >= MAX_DECODERS)
 		return;
@@ -112,11 +111,11 @@ void SoundHandler::RemoveDecoder(int voice)
 
 void SoundHandler::ClearDecoderList()
 {
-	for(u32 i = 0; i < MAX_DECODERS; ++i)
+	for(uint32_t i = 0; i < MAX_DECODERS; ++i)
 		RemoveDecoder(i);
 }
 
-static inline bool CheckMP3Signature(const u8 * buffer)
+static inline bool CheckMP3Signature(const uint8_t * buffer)
 {
 	const char MP3_Magic[][3] =
 	{
@@ -152,22 +151,22 @@ static inline bool CheckMP3Signature(const u8 * buffer)
 
 SoundDecoder * SoundHandler::GetSoundDecoder(const char * filepath)
 {
-	u32 magic;
+	uint32_t magic;
 	CFile f(filepath, CFile::ReadOnly);
 	if(f.size() == 0)
 		return NULL;
 
 	do
 	{
-		f.read((u8 *) &magic, 1);
+		f.read((uint8_t *) &magic, 1);
 	}
-	while(((u8 *) &magic)[0] == 0 && f.tell() < f.size());
+	while(((uint8_t *) &magic)[0] == 0 && f.tell() < f.size());
 
 	if(f.tell() == f.size())
 		return NULL;
 
 	f.seek(f.tell()-1, SEEK_SET);
-	f.read((u8 *) &magic, 4);
+	f.read((uint8_t *) &magic, 4);
 	f.close();
 
 	if(magic == 0x4f676753) // 'OggS'
@@ -178,7 +177,7 @@ SoundDecoder * SoundHandler::GetSoundDecoder(const char * filepath)
 	{
 		return new WavDecoder(filepath);
 	}
-	else if(CheckMP3Signature((u8 *) &magic) == true)
+	else if(CheckMP3Signature((uint8_t *) &magic) == true)
 	{
 		return new Mp3Decoder(filepath);
 	}
@@ -186,9 +185,9 @@ SoundDecoder * SoundHandler::GetSoundDecoder(const char * filepath)
 	return new SoundDecoder(filepath);
 }
 
-SoundDecoder * SoundHandler::GetSoundDecoder(const u8 * sound, int length)
+SoundDecoder * SoundHandler::GetSoundDecoder(const uint8_t * sound, int length)
 {
-	const u8 * check = sound;
+	const uint8_t * check = sound;
 	int counter = 0;
 
 	while(check[0] == 0 && counter < length)
@@ -200,7 +199,7 @@ SoundDecoder * SoundHandler::GetSoundDecoder(const u8 * sound, int length)
 	if(counter >= length)
 		return NULL;
 
-	u32 * magic = (u32 *) check;
+	uint32_t * magic = (uint32_t *) check;
 
 	if(magic[0] == 0x4f676753) // 'OggS'
 	{
@@ -240,7 +239,7 @@ void SoundHandler::executeThread()
     // The problem with last voice on 500 was caused by it having priority 0
     // We would need to change this priority distribution if for some reason
     // we would need MAX_DECODERS > Voice::PRIO_MAX
-    for(u32 i = 0; i < MAX_DECODERS; ++i)
+    for(uint32_t i = 0; i < MAX_DECODERS; ++i)
     {
         int priority = (MAX_DECODERS - i) * Voice::PRIO_MAX  / MAX_DECODERS;
         voiceList[i] = new Voice(priority); // allocate voice 0 with highest priority
@@ -249,7 +248,7 @@ void SoundHandler::executeThread()
     AXRegisterAppFrameCallback(SoundHandler::axFrameCallback);
 
 
-	u16 i = 0;
+	uint16_t i = 0;
 	while (!ExitRequested)
 	{
 		suspendThread();
@@ -270,13 +269,13 @@ void SoundHandler::executeThread()
 		Decoding = false;
 	}
 
-	for(u32 i = 0; i < MAX_DECODERS; ++i)
+	for(uint32_t i = 0; i < MAX_DECODERS; ++i)
         voiceList[i]->stop();
 
     AXRegisterAppFrameCallback(NULL);
     AXQuit();
 
-    for(u32 i = 0; i < MAX_DECODERS; ++i)
+    for(uint32_t i = 0; i < MAX_DECODERS; ++i)
     {
         delete voiceList[i];
         voiceList[i] = NULL;
@@ -285,7 +284,7 @@ void SoundHandler::executeThread()
 
 void SoundHandler::axFrameCallback(void)
 {
-    for (u32 i = 0; i < MAX_DECODERS; i++)
+    for (uint32_t i = 0; i < MAX_DECODERS; i++)
     {
         Voice *voice = handlerInstance->getVoice(i);
 
@@ -300,12 +299,12 @@ void SoundHandler::axFrameCallback(void)
                 decoder->Lock();
                 if(decoder->IsBufferReady())
                 {
-                    const u8 *buffer = decoder->GetBuffer();
-                    const u32 bufferSize = decoder->GetBufferSize();
+                    const uint8_t *buffer = decoder->GetBuffer();
+                    const uint32_t bufferSize = decoder->GetBufferSize();
                     decoder->LoadNext();
 
-                    const u8 *nextBuffer = NULL;
-                    u32 nextBufferSize = 0;
+                    const uint8_t *nextBuffer = NULL;
+                    uint32_t nextBufferSize = 0;
 
                     if(decoder->IsBufferReady())
                     {

@@ -44,7 +44,7 @@ void TcpReceiver::executeThread()
 		return;
 	}
 
-    u32 enable = 1;
+    uint32_t enable = 1;
 	setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
 
 	struct sockaddr_in bindAddress;
@@ -53,7 +53,7 @@ void TcpReceiver::executeThread()
 	bindAddress.sin_port = serverPort;
 	bindAddress.sin_addr.s_addr = INADDR_ANY;
 
-	s32 ret;
+	int32_t ret;
 	if ((ret = bind(serverSocket, (struct sockaddr *)&bindAddress, sizeof(bindAddress))) < 0)
     {
 	    log_printf("Server socket bind failed\n");
@@ -74,10 +74,10 @@ void TcpReceiver::executeThread()
 
     while(!exitRequested)
     {
-        s32 clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddr, &addrlen);
+        int32_t clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddr, &addrlen);
         if(clientSocket >= 0)
         {
-            u32 ipAddress = clientAddr.sin_addr.s_addr;
+            uint32_t ipAddress = clientAddr.sin_addr.s_addr;
             serverReceiveStart(this, ipAddress);
             int result = loadToMemory(clientSocket, ipAddress);
             serverReceiveFinished(this, ipAddress, result);
@@ -96,12 +96,12 @@ void TcpReceiver::executeThread()
     socketclose(serverSocket);
 }
 
-int TcpReceiver::loadToMemory(s32 clientSocket, u32 ipAddress)
+int TcpReceiver::loadToMemory(int32_t clientSocket, uint32_t ipAddress)
 {
     log_printf("Loading file from ip %08X\n", ipAddress);
 
-    u32 fileSize = 0;
-    u32 fileSizeUnc = 0;
+    uint32_t fileSize = 0;
+    uint32_t fileSizeUnc = 0;
     unsigned char haxx[8];
     memset(haxx, 0, sizeof(haxx));
     //skip haxx
@@ -113,7 +113,7 @@ int TcpReceiver::loadToMemory(s32 clientSocket, u32 ipAddress)
         recvwait(clientSocket, (unsigned char*)&fileSizeUnc, sizeof(fileSizeUnc)); // Compressed protocol, read another 4 bytes
     }
 
-    u32 bytesRead = 0;
+    uint32_t bytesRead = 0;
     struct in_addr in;
     in.s_addr = ipAddress;
     progressWindow.setTitle(strfmt("Loading file from %s", inet_ntoa(in)));
@@ -131,9 +131,9 @@ int TcpReceiver::loadToMemory(s32 clientSocket, u32 ipAddress)
     // Copy rpl in memory
     while(bytesRead < fileSize)
     {
-        progressWindow.setProgress(100.0f * (f32)bytesRead / (f32)fileSize);
+        progressWindow.setProgress(100.0f * (float)bytesRead / (float)fileSize);
 
-        u32 blockSize = 0x1000;
+        uint32_t blockSize = 0x1000;
         if(blockSize > (fileSize - bytesRead))
             blockSize = fileSize - bytesRead;
 
@@ -147,7 +147,7 @@ int TcpReceiver::loadToMemory(s32 clientSocket, u32 ipAddress)
         bytesRead += ret;
     }
 
-    progressWindow.setProgress((f32)bytesRead / (f32)fileSize);
+    progressWindow.setProgress((float)bytesRead / (float)fileSize);
 
     if(bytesRead != fileSize)
     {

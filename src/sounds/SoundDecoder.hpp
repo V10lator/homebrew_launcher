@@ -35,24 +35,24 @@ class SoundDecoder
 public:
 	SoundDecoder();
 	SoundDecoder(const std::string & filepath);
-	SoundDecoder(const u8 * buffer, int size);
+	SoundDecoder(const uint8_t * buffer, int size);
 	virtual ~SoundDecoder();
 	virtual void Lock() { mutex.lock(); }
 	virtual void Unlock() { mutex.unlock(); }
-	virtual int Read(u8 * buffer, int buffer_size, int pos);
+	virtual int Read(uint8_t * buffer, int buffer_size, int pos);
 	virtual int Tell() { return CurPos; }
 	virtual int Seek(int pos) { CurPos = pos; return file_fd->seek(CurPos, SEEK_SET); }
 	virtual int Rewind();
-	virtual u16 GetFormat() { return Format; }
-	virtual u16 GetSampleRate() { return SampleRate; }
+	virtual uint16_t GetFormat() { return Format; }
+	virtual uint16_t GetSampleRate() { return SampleRate; }
 	virtual void Decode();
 	virtual bool IsBufferReady() { return SoundBuffer.IsBufferReady(); }
-	virtual u8 * GetBuffer() { return SoundBuffer.GetBuffer(); }
-	virtual u32 GetBufferSize() { return SoundBuffer.GetBufferSize(); }
+	virtual uint8_t * GetBuffer() { return SoundBuffer.GetBuffer(); }
+	virtual uint32_t GetBufferSize() { return SoundBuffer.GetBufferSize(); }
 	virtual void LoadNext() { SoundBuffer.LoadNext(); }
 	virtual bool IsEOF() { return EndOfFile; }
 	virtual void SetLoop(bool l) { Loop = l; EndOfFile = false; }
-	virtual u8 GetSoundType() { return SoundType; }
+	virtual uint8_t GetSoundType() { return SoundType; }
 	virtual void ClearBuffer() { SoundBuffer.ClearBuffer(); whichLoad = 0; }
 	virtual bool IsStereo() { return (GetFormat() & CHANNELS_STEREO) != 0; }
 	virtual bool Is16Bit() { return ((GetFormat() & 0xFF) == FORMAT_PCM_16_BIT); }
@@ -80,13 +80,13 @@ public:
     };
 protected:
 	void Init();
-	void Upsample(s16 *src, s16 *dst, u32 nr_src_samples, u32 nr_dst_samples);
+	void Upsample(int16_t *src, int16_t *dst, uint32_t nr_src_samples, uint32_t nr_dst_samples);
 
 	CFile * file_fd;
 	BufferCircle SoundBuffer;
-	u8 SoundType;
-	u16 whichLoad;
-	u16 SoundBlocks;
+	uint8_t SoundType;
+	uint16_t whichLoad;
+	uint16_t SoundBlocks;
 	int SoundBlockSize;
 	int CurPos;
 	bool ResampleTo48kHz;
@@ -94,10 +94,10 @@ protected:
 	bool EndOfFile;
 	bool Decoding;
 	bool ExitRequested;
-	u16 Format;
-	u16 SampleRate;
-	u8 *ResampleBuffer;
-	u32 ResampleRatio;
+	uint16_t Format;
+	uint16_t SampleRate;
+	uint8_t *ResampleBuffer;
+	uint32_t ResampleRatio;
 	CMutex mutex;
 };
 

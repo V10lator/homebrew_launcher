@@ -16,7 +16,7 @@ CFile::CFile(const std::string & filepath, eOpenTypes mode)
 	this->open(filepath, mode);
 }
 
-CFile::CFile(const u8 * mem, int size)
+CFile::CFile(const uint8_t * mem, int size)
 {
 	iFd = -1;
 	this->open(mem, size);
@@ -31,7 +31,7 @@ int CFile::open(const std::string & filepath, eOpenTypes mode)
 {
 	this->close();
 
-	s32 openMode = 0;
+	int32_t openMode = 0;
 
 	switch(mode)
 	{
@@ -65,7 +65,7 @@ int CFile::open(const std::string & filepath, eOpenTypes mode)
 	return 0;
 }
 
-int CFile::open(const u8 * mem, int size)
+int CFile::open(const uint8_t * mem, int size)
 {
 	this->close();
 
@@ -86,7 +86,7 @@ void CFile::close()
 	pos = 0;
 }
 
-int CFile::read(u8 * ptr, size_t size)
+int CFile::read(uint8_t * ptr, size_t size)
 {
 	if(iFd >= 0)
 	{
@@ -98,7 +98,7 @@ int CFile::read(u8 * ptr, size_t size)
 
 	int readsize = size;
 
-	if(readsize > (s64) (filesize-pos))
+	if(readsize > (int64_t) (filesize-pos))
 		readsize = filesize-pos;
 
 	if(readsize <= 0)
@@ -114,7 +114,7 @@ int CFile::read(u8 * ptr, size_t size)
 	return -1;
 }
 
-int CFile::write(const u8 * ptr, size_t size)
+int CFile::write(const uint8_t * ptr, size_t size)
 {
 	if(iFd >= 0)
 	{
@@ -138,7 +138,7 @@ int CFile::write(const u8 * ptr, size_t size)
 int CFile::seek(long int offset, int origin)
 {
 	int ret = 0;
-	s64 newPos = pos;
+	int64_t newPos = pos;
 
 	if(origin == SEEK_SET)
 	{
@@ -184,7 +184,7 @@ int CFile::fwrite(const char *format, ...)
 	va_start(va, format);
 	if((vasprintf(&tmp, format, va) >= 0) && tmp)
 	{
-        result = this->write((u8 *)tmp, strlen(tmp));
+        result = this->write((uint8_t *)tmp, strlen(tmp));
 	}
 	va_end(va);
 

@@ -36,9 +36,9 @@ extern "C" {
 #define ROUNDDOWN(val, align)   ((val) & ~(align-1))
 #define ROUNDUP(val, align)     ROUNDDOWN(((val) + (align-1)), align)
 
-#define le16(i)         ((((u16) ((i) & 0xFF)) << 8) | ((u16) (((i) & 0xFF00) >> 8)))
-#define le32(i)         ((((u32)le16((i) & 0xFFFF)) << 16) | ((u32)le16(((i) & 0xFFFF0000) >> 16)))
-#define le64(i)         ((((u64)le32((i) & 0xFFFFFFFFLL)) << 32) | ((u64)le32(((i) & 0xFFFFFFFF00000000LL) >> 32)))
+#define le16(i)         ((((uint16_t) ((i) & 0xFF)) << 8) | ((uint16_t) (((i) & 0xFF00) >> 8)))
+#define le32(i)         ((((uint32_t)le16((i) & 0xFFFF)) << 16) | ((uint32_t)le16(((i) & 0xFFFF0000) >> 16)))
+#define le64(i)         ((((uint64_t)le32((i) & 0xFFFFFFFFLL)) << 32) | ((uint64_t)le32(((i) & 0xFFFFFFFF00000000LL) >> 32)))
 
 void SC0x25_KernelCopyData(unsigned int addr, unsigned int src, unsigned int len);
 

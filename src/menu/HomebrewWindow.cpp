@@ -23,6 +23,8 @@
 #include "utils/HomebrewXML.h"
 #include "utils/utils.h"
 #include "HomebrewLaunchWindow.h"
+#include "resources/Resources.h"
+#include "utils/logger.h"
 
 #define DEFAULT_WIILOAD_PORT        4299
 
@@ -79,8 +81,8 @@ HomebrewWindow::HomebrewWindow(int w, int h)
         if(slashPos != std::string::npos)
             homebrewPath.erase(slashPos);
 
-        u8 * iconData = NULL;
-        u32 iconDataSize = 0;
+        uint8_t * iconData = NULL;
+        uint32_t iconDataSize = 0;
 
         LoadFileToMem((homebrewPath + "/icon.png").c_str(), &iconData, &iconDataSize);
 
@@ -168,7 +170,7 @@ HomebrewWindow::HomebrewWindow(int w, int h)
 
 HomebrewWindow::~HomebrewWindow()
 {
-    for(u32 i = 0; i < homebrewButtons.size(); ++i)
+    for(uint32_t i = 0; i < homebrewButtons.size(); ++i)
     {
         delete homebrewButtons[i].image;
         delete homebrewButtons[i].nameLabel;
@@ -197,7 +199,7 @@ void HomebrewWindow::OnCloseEffectFinish(GuiElement *element)
     remove(element);
     AsyncDeleter::pushForDelete(element);
 
-    for(u32 i = 0; i < homebrewButtons.size(); i++)
+    for(uint32_t i = 0; i < homebrewButtons.size(); i++)
     {
         homebrewButtons[i].button->clearState(GuiElement::STATE_DISABLED);
     }
@@ -214,7 +216,7 @@ void HomebrewWindow::OnHomebrewButtonClick(GuiButton *button, const GuiControlle
 {
     bool disableButtons = false;
 
-    for(u32 i = 0; i < homebrewButtons.size(); i++)
+    for(uint32_t i = 0; i < homebrewButtons.size(); i++)
     {
         if(button == homebrewButtons[i].button)
         {
@@ -233,7 +235,7 @@ void HomebrewWindow::OnHomebrewButtonClick(GuiButton *button, const GuiControlle
 
     if(disableButtons)
     {
-        for(u32 i = 0; i < homebrewButtons.size(); i++)
+        for(uint32_t i = 0; i < homebrewButtons.size(); i++)
         {
             homebrewButtons[i].button->setState(GuiElement::STATE_DISABLED);
         }
@@ -294,7 +296,7 @@ void HomebrewWindow::draw(CVideo *pVideo)
     {
         bUpdatePositions = false;
 
-        for(u32 i = 0; i < homebrewButtons.size(); i++)
+        for(uint32_t i = 0; i < homebrewButtons.size(); i++)
         {
             float fXOffset = (i / MAX_BUTTONS_ON_PAGE) * getWidth();
             float fYOffset = (homebrewButtons[i].image->getHeight() + 20.0f) * 1.5f - (homebrewButtons[i].image->getHeight() + 20) * (i % MAX_BUTTONS_ON_PAGE);
@@ -312,14 +314,14 @@ void HomebrewWindow::OnCloseTcpReceiverFinish(GuiElement *element)
     clearState(STATE_DISABLED);
 }
 
-void HomebrewWindow::OnTcpReceiveStart(GuiElement *element, u32 ip)
+void HomebrewWindow::OnTcpReceiveStart(GuiElement *element, uint32_t ip)
 {
     element->setEffect(EFFECT_FADE, 15, 255);
     element->effectFinished.connect(this, &HomebrewWindow::OnOpenEffectFinish);
     append(element);
 }
 
-void HomebrewWindow::OnTcpReceiveFinish(GuiElement *element, u32 ip, int result)
+void HomebrewWindow::OnTcpReceiveFinish(GuiElement *element, uint32_t ip, int result)
 {
     element->setState(GuiElement::STATE_DISABLED);
     element->setEffect(EFFECT_FADE, -10, 0);

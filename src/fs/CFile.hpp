@@ -21,11 +21,11 @@ class CFile
 
 		CFile();
 		CFile(const std::string & filepath, eOpenTypes mode);
-		CFile(const u8 * memory, int memsize);
+		CFile(const uint8_t * memory, int memsize);
 		virtual ~CFile();
 
 		int open(const std::string & filepath, eOpenTypes mode);
-		int open(const u8 * memory, int memsize);
+		int open(const uint8_t * memory, int memsize);
 
 		bool isOpen() const {
             if(iFd >= 0)
@@ -39,19 +39,19 @@ class CFile
 
 		void close();
 
-		int read(u8 * ptr, size_t size);
-		int write(const u8 * ptr, size_t size);
+		int read(uint8_t * ptr, size_t size);
+		int write(const uint8_t * ptr, size_t size);
 		int fwrite(const char *format, ...);
 		int seek(long int offset, int origin);
-		u64 tell() { return pos; };
-		u64 size() { return filesize; };
+		uint64_t tell() { return pos; };
+		uint64_t size() { return filesize; };
 		void rewind() { this->seek(0, SEEK_SET); };
 
 	protected:
 		int iFd;
-		const u8 * mem_file;
-		u64 filesize;
-		u64 pos;
+		const uint8_t * mem_file;
+		uint64_t filesize;
+		uint64_t pos;
 };
 
 #endif

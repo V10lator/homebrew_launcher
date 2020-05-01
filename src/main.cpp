@@ -3,7 +3,6 @@
 #include "system/memory.h"
 #include "utils/logger.h"
 #include "utils/utils.h"
-#include "dynamic_libs/padscore_functions.h"
 #include "common/common.h"
 #include "kernel/gx2sploit.h"
 #include "menu/HomebrewMemory.h"
@@ -27,9 +26,6 @@ extern "C" int Menu_Main(void)
     }
 
     log_printf("Welcome to the Homebrew Launcher %s\n", HBL_VERSION);
-
-    InitPadScoreFunctionPointers();
-    log_printf("Function exports loaded\n");
 
     //! initialize homebrew memory layout
     HomebrewInitMemory();

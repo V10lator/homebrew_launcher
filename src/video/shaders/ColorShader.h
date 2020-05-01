@@ -27,8 +27,8 @@ private:
     ColorShader();
     virtual ~ColorShader();
 
-    static const u32 cuAttributeCount = 2;
-    static const u32 cuPositionVtxsSize = 4 * cuVertexAttrSize;
+    static const uint32_t cuAttributeCount = 2;
+    static const uint32_t cuPositionVtxsSize = 4 * cuVertexAttrSize;
 
     static ColorShader *shaderInstance;
 
@@ -36,16 +36,16 @@ private:
     VertexShader vertexShader;
     PixelShader pixelShader;
 
-    f32 *positionVtxs;
+    float *positionVtxs;
 
-    u32 angleLocation;
-    u32 offsetLocation;
-    u32 scaleLocation;
-    u32 colorLocation;
-    u32 colorIntensityLocation;
-    u32 positionLocation;
+    uint32_t angleLocation;
+    uint32_t offsetLocation;
+    uint32_t scaleLocation;
+    uint32_t colorLocation;
+    uint32_t colorIntensityLocation;
+    uint32_t positionLocation;
 public:
-    static const u32 cuColorVtxsSize = 4 * cuColorAttrSize;
+    static const uint32_t cuColorVtxsSize = 4 * cuColorAttrSize;
 
     static ColorShader *instance() {
         if(!shaderInstance) {
@@ -67,7 +67,7 @@ public:
         pixelShader.setShader();
     }
 
-    void setAttributeBuffer(const u8 * colorAttr, const f32 * posVtxs_in = NULL, const u32 & vtxCount = 0) const
+    void setAttributeBuffer(const uint8_t * colorAttr, const float * posVtxs_in = NULL, const uint32_t & vtxCount = 0) const
     {
         if(posVtxs_in && vtxCount) {
             VertexShader::setAttributeBuffer(0, vtxCount * cuVertexAttrSize, cuVertexAttrSize, posVtxs_in);

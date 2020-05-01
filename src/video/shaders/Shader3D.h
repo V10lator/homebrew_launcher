@@ -30,26 +30,26 @@ private:
     static Shader3D * shaderInstance;
 
     static const unsigned char cuAttributeCount = 2;
-    static const u32 ciPositionVtxsSize = 4 * cuVertexAttrSize;
-    static const u32 ciTexCoordsVtxsSize = 4 * cuTexCoordAttrSize;
+    static const uint32_t ciPositionVtxsSize = 4 * cuVertexAttrSize;
+    static const uint32_t ciTexCoordsVtxsSize = 4 * cuTexCoordAttrSize;
 
     FetchShader *fetchShader;
     VertexShader vertexShader;
     PixelShader pixelShader;
 
-    f32 *posVtxs;
-    f32 *texCoords;
+    float *posVtxs;
+    float *texCoords;
 
-    u32 modelMatrixLocation;
-    u32 viewMatrixLocation;
-    u32 projectionMatrixLocation;
-    u32 positionLocation;
-    u32 texCoordLocation;
+    uint32_t modelMatrixLocation;
+    uint32_t viewMatrixLocation;
+    uint32_t projectionMatrixLocation;
+    uint32_t positionLocation;
+    uint32_t texCoordLocation;
 
-    u32 colorIntensityLocation;
-    u32 fadeDistanceLocation;
-    u32 fadeOutLocation;
-    u32 samplerLocation;
+    uint32_t colorIntensityLocation;
+    uint32_t fadeDistanceLocation;
+    uint32_t fadeOutLocation;
+    uint32_t samplerLocation;
 public:
     static Shader3D *instance() {
         if(!shaderInstance) {
@@ -71,7 +71,7 @@ public:
         pixelShader.setShader();
     }
 
-    void setAttributeBuffer(const u32 & vtxCount = 0, const f32 * posVtxs_in = NULL, const f32 * texCoords_in = NULL) const
+    void setAttributeBuffer(const uint32_t & vtxCount = 0, const float * posVtxs_in = NULL, const float * texCoords_in = NULL) const
     {
         if(posVtxs_in && texCoords_in && vtxCount)
         {

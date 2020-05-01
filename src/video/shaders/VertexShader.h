@@ -23,7 +23,7 @@
 class VertexShader : public Shader
 {
 public:
-    VertexShader(u32 numAttr)
+    VertexShader(uint32_t numAttr)
         : attributesCount( numAttr )
         , attributes( new GX2AttribStream[attributesCount] )
         , vertexShader( (GX2VertexShader*) memalign(0x40, sizeof(GX2VertexShader)) )
@@ -43,13 +43,13 @@ public:
             if(vertexShader->program)
                 free(vertexShader->program);
 
-            for(u32 i = 0; i < vertexShader->uniformBlockCount; i++)
+            for(uint32_t i = 0; i < vertexShader->uniformBlockCount; i++)
                 free((void*)vertexShader->uniformBlocks[i].name);
 
             if(vertexShader->uniformBlocks)
                 free((void*)vertexShader->uniformBlocks);
 
-            for(u32 i = 0; i < vertexShader->uniformVarCount; i++)
+            for(uint32_t i = 0; i < vertexShader->uniformVarCount; i++)
                 free((void*)vertexShader->uniformVars[i].name);
 
             if(vertexShader->uniformVars)
@@ -58,13 +58,13 @@ public:
             if(vertexShader->initialValues)
                 free((void*)vertexShader->initialValues);
 
-            for(u32 i = 0; i < vertexShader->samplerVarCount; i++)
+            for(uint32_t i = 0; i < vertexShader->samplerVarCount; i++)
                 free((void*)vertexShader->samplerVars[i].name);
 
             if(vertexShader->samplerVars)
                 free((void*)vertexShader->samplerVars);
 
-            for(u32 i = 0; i < vertexShader->attribVarCount; i++)
+            for(uint32_t i = 0; i < vertexShader->attribVarCount; i++)
                 free((void*)vertexShader->attribVars[i].name);
 
             if(vertexShader->attribVars)
@@ -77,14 +77,14 @@ public:
         }
     }
 
-    void setProgram(const u32 * program, const u32 & programSize, const u32 * regs, const u32 & regsSize)
+    void setProgram(const uint32_t * program, const uint32_t & programSize, const uint32_t * regs, const uint32_t & regsSize)
     {
         if(!vertexShader)
             return;
 
         //! this must be moved into an area where the graphic engine has access to and must be aligned to 0x100
         vertexShader->size = programSize;
-        vertexShader->program = (u8*) memalign(GX2_SHADER_ALIGNMENT, vertexShader->size);
+        vertexShader->program = (uint8_t*) memalign(GX2_SHADER_ALIGNMENT, vertexShader->size);
         if(vertexShader->program)
         {
             memcpy(vertexShader->program, program, vertexShader->size);
@@ -99,7 +99,7 @@ public:
         if(!vertexShader)
             return;
 
-        u32 idx = vertexShader->uniformVarCount;
+        uint32_t idx = vertexShader->uniformVarCount;
 
         GX2UniformVar* newVar = (GX2UniformVar*) malloc((vertexShader->uniformVarCount + 1) * sizeof(GX2UniformVar));
         if(newVar)
@@ -124,7 +124,7 @@ public:
         if(!vertexShader)
             return;
 
-        u32 idx = vertexShader->attribVarCount;
+        uint32_t idx = vertexShader->attribVarCount;
 
         GX2AttribVar* newVar = (GX2AttribVar*) malloc((vertexShader->attribVarCount + 1) * sizeof(GX2AttribVar));
         if(newVar)
@@ -144,7 +144,7 @@ public:
         }
     }
 
-    static inline void setAttributeBuffer(u32 bufferIdx, u32 bufferSize, u32 stride, const void * buffer) {
+    static inline void setAttributeBuffer(uint32_t bufferIdx, uint32_t bufferSize, uint32_t stride, const void * buffer) {
         GX2SetAttribBuffer(bufferIdx, bufferSize, stride, (void*)buffer);
     }
 
@@ -156,21 +156,21 @@ public:
         GX2SetVertexShader(vertexShader);
     }
 
-    GX2AttribStream * getAttributeBuffer(u32 idx = 0) const {
+    GX2AttribStream * getAttributeBuffer(uint32_t idx = 0) const {
         if(idx >= attributesCount) {
             return NULL;
         }
         return &attributes[idx];
     }
-    u32 getAttributesCount() const {
+    uint32_t getAttributesCount() const {
         return attributesCount;
     }
 
-    static void setUniformReg(u32 location, u32 size, const void * reg) {
+    static void setUniformReg(uint32_t location, uint32_t size, const void * reg) {
         GX2SetVertexUniformReg(location, size, (uint32_t*)reg);
     }
 protected:
-    u32 attributesCount;
+    uint32_t attributesCount;
     GX2AttribStream *attributes;
     GX2VertexShader *vertexShader;
 };

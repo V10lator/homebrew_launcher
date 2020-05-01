@@ -37,15 +37,15 @@ protected:
     Shader() {}
     virtual ~Shader() {}
 public:
-    static const u16 cuVertexAttrSize = sizeof(f32) * 3;
-    static const u16 cuTexCoordAttrSize = sizeof(f32) * 2;
-    static const u16 cuColorAttrSize = sizeof(u8) * 4;
+    static const uint16_t cuVertexAttrSize = sizeof(float) * 3;
+    static const uint16_t cuTexCoordAttrSize = sizeof(float) * 2;
+    static const uint16_t cuColorAttrSize = sizeof(uint8_t) * 4;
 
-    static void setLineWidth(const f32 & width) {
+    static void setLineWidth(const float & width) {
         GX2SetLineWidth(width);
     }
 
-    static void draw(s32 primitive = GX2_PRIMITIVE_MODE_QUADS, u32 vtxCount = 4)
+    static void draw(int32_t primitive = GX2_PRIMITIVE_MODE_QUADS, uint32_t vtxCount = 4)
     {
         switch(primitive)
         {

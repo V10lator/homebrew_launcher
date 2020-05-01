@@ -18,7 +18,7 @@
 #include <string.h>
 #include "Texture2DShader.h"
 
-static const u32 cpVertexShaderProgram[] =
+static const uint32_t cpVertexShaderProgram[] =
 {
     0x00000000,0x00008009,0x20000000,0x000080a0,
     0x3c200100,0x88060094,0x00400000,0x88042014,
@@ -56,7 +56,7 @@ static const u32 cpVertexShaderProgram[] =
     0x7c0e2df2,0x81173cfa
 };
 
-static const u32 cpVertexShaderRegs[] = {
+static const uint32_t cpVertexShaderRegs[] = {
     0x00000103,0x00000000,0x00000000,0x00000001,
     0xffffff00,0xffffffff,0xffffffff,0xffffffff,
     0xffffffff,0xffffffff,0xffffffff,0xffffffff,
@@ -72,7 +72,7 @@ static const u32 cpVertexShaderRegs[] = {
     0x000000ff,0x00000000,0x0000000e,0x00000010
 };
 
-static const u32 cPixelShaderProgram[] =
+static const uint32_t cPixelShaderProgram[] =
 {
     0x20000000,0x00000ca4,0x0b000000,0x00000085,
     0x24000000,0x000050a0,0xb0000000,0x000cc080,
@@ -180,7 +180,7 @@ static const u32 cPixelShaderProgram[] =
     0x10000000,0x00100df0,0x00008010,0xecdfea0d,
     0xc8581837,0x22740275,0x281eddcc,0xfa8b9b65
 };
-static const u32 cPixelShaderRegs[] = {
+static const uint32_t cPixelShaderRegs[] = {
     0x00000109,0x00000002,0x14000001,0x00000000,
     0x00000001,0x00000100,0x00000000,0x00000000,
     0x00000000,0x00000000,0x00000000,0x00000000,
@@ -233,8 +233,8 @@ Texture2DShader::Texture2DShader()
     fetchShader = new FetchShader(vertexShader.getAttributeBuffer(), vertexShader.getAttributesCount());
 
     //! model vertex has to be align and cannot be in unknown regions for GX2 like 0xBCAE1000
-    posVtxs = (f32*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciPositionVtxsSize);
-    texCoords = (f32*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciTexCoordsVtxsSize);
+    posVtxs = (float*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciPositionVtxsSize);
+    texCoords = (float*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciTexCoordsVtxsSize);
 
     //! defaults for normal square
     //! position vertex structure and texture coordinate vertex structure

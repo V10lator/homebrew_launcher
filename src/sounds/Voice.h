@@ -70,7 +70,7 @@ public:
         }
     }
 
-    void play(const u8 *buffer, u32 bufferSize, const u8 *nextBuffer, u32 nextBufSize, u16 format, u32 sampleRate)
+    void play(const uint8_t *buffer, uint32_t bufferSize, const uint8_t *nextBuffer, uint32_t nextBufSize, uint16_t format, uint32_t sampleRate)
     {
         if(!voice)
             return;
@@ -86,11 +86,11 @@ public:
         nextBufferSize = nextBufSize;
 
         // TODO: handle support for 3.1.0 with dynamic libs instead of static linking it
-        //u32 samplesPerSec = (AXGetInputSamplesPerSec != 0) ? AXGetInputSamplesPerSec() : 32000;
-        u32 samplesPerSec = AXGetInputSamplesPerSec();
+        //uint32_t samplesPerSec = (AXGetInputSamplesPerSec != 0) ? AXGetInputSamplesPerSec() : 32000;
+        uint32_t samplesPerSec = AXGetInputSamplesPerSec();
 
         memset(&ratioBits, 0, sizeof(ratioBits));
-        ratioBits.ratio = (u32)(0x00010000 * ((f32)sampleRate / (f32)samplesPerSec));
+        ratioBits.ratio = (uint32_t)(0x00010000 * ((float)sampleRate / (float)samplesPerSec));
 
         AXSetVoiceOffsets(voice, &voiceBuffer);
         AXSetVoiceSrc(voice, &ratioBits);
@@ -104,7 +104,7 @@ public:
             AXSetVoiceState(voice, 0);
     }
 
-    void setVolume(u32 vol)
+    void setVolume(uint32_t vol)
     {
         if(voice)
         {
@@ -116,9 +116,9 @@ public:
     }
 
 
-    void setNextBuffer(const u8 *buffer, u32 bufferSize)
+    void setNextBuffer(const uint8_t *buffer, uint32_t bufferSize)
     {
-        voiceBuffer.loopOffset = ((buffer - (const u8*)voiceBuffer.data) >> 1);
+        voiceBuffer.loopOffset = ((buffer - (const uint8_t*)voiceBuffer.data) >> 1);
         nextBufferSize = bufferSize;
 
         AXSetVoiceLoopOffset(voice, voiceBuffer.loopOffset);
@@ -126,7 +126,7 @@ public:
 
     bool isBufferSwitched()
     {
-        u32 loopCounter = AXGetVoiceLoopCount(voice);
+        uint32_t loopCounter = AXGetVoiceLoopCount(voice);
         if(lastLoopCounter != loopCounter)
         {
             lastLoopCounter = loopCounter;
@@ -136,15 +136,15 @@ public:
         return false;
     }
 
-    u32 getInternState() const {
+    uint32_t getInternState() const {
         if(voice)
-            return ((u32 *)voice)[1];
+            return ((uint32_t *)voice)[1];
         return 0;
     }
-    u32 getState() const {
+    uint32_t getState() const {
         return state;
     }
-    void setState(u32 s) {
+    void setState(uint32_t s) {
         state = s;
     }
 
@@ -156,9 +156,9 @@ private:
     AXVoice *voice;
     AXVoiceSrc ratioBits;
     AXVoiceOffsets voiceBuffer;
-    u32 state;
-    u32 nextBufferSize;
-    u32 lastLoopCounter;
+    uint32_t state;
+    uint32_t nextBufferSize;
+    uint32_t lastLoopCounter;
 };
 
 #endif // _AXSOUND_H_

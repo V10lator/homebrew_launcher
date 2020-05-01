@@ -18,7 +18,7 @@
 #include <string.h>
 #include "Shader3D.h"
 
-static const u32 cpVertexShaderProgram[] =
+static const uint32_t cpVertexShaderProgram[] =
 {
     0x00000000,0x00008009,0x20000000,0x0000e4a1,
     0x00c00100,0x88048093,0x01c00300,0x98060014,
@@ -112,7 +112,7 @@ static const u32 cpVertexShaderProgram[] =
     0x7642ed30,0x7408600d
 };
 
-static const u32 cpVertexShaderRegs[] = {
+static const uint32_t cpVertexShaderRegs[] = {
     0x00000108,0x00000000,0x00000002,0x00000001,
     0xffff0001,0xffffffff,0xffffffff,0xffffffff,
     0xffffffff,0xffffffff,0xffffffff,0xffffffff,
@@ -128,7 +128,7 @@ static const u32 cpVertexShaderRegs[] = {
     0x000000ff,0x00000000,0x0000000e,0x00000010
 };
 
-static const u32 cPixelShaderProgram[] =
+static const uint32_t cPixelShaderProgram[] =
 {
     0x20000000,0x000008a4,0x03000000,0x01004085,
     0x23000000,0x000044a8,0x35000000,0x000000a4,
@@ -173,7 +173,7 @@ static const u32 cPixelShaderProgram[] =
     0x10000100,0x01100df0,0x00008010,0xecdfea0d,
     0x99720984,0x041cab0d,0xa28a9ccd,0x95d199a5
 };
-static const u32 cPixelShaderRegs[] = {
+static const uint32_t cPixelShaderRegs[] = {
     0x00000102,0x00000002,0x14000002,0x00000000,
     0x00000002,0x00000100,0x00000101,0x00000000,
     0x00000000,0x00000000,0x00000000,0x00000000,
@@ -229,8 +229,8 @@ Shader3D::Shader3D()
 
     //! initialize default quad texture vertexes as those are very commonly used
     //! model vertex has to be align and cannot be in unknown regions for GX2 like 0xBCAE1000
-    posVtxs = (f32*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciPositionVtxsSize);
-    texCoords = (f32*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciTexCoordsVtxsSize);
+    posVtxs = (float*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciPositionVtxsSize);
+    texCoords = (float*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, ciTexCoordsVtxsSize);
 
     //! position vertex structure and texture coordinate vertex structure
     int i = 0;

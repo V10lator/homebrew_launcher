@@ -30,7 +30,7 @@
 class CVideo
 {
 public:
-    CVideo(s32 forceTvScanMode = -1, s32 forceDrcScanMode = -1);
+    CVideo(int32_t forceTvScanMode = -1, int32_t forceDrcScanMode = -1);
     virtual ~CVideo();
 
     void prepareTvRendering(void) {
@@ -110,21 +110,21 @@ public:
         }
     }
 
-    u32 getFrameCount(void) const {
+    uint32_t getFrameCount(void) const {
         return frameCount;
     }
 
-    u32 getTvWidth(void) const {
+    uint32_t getTvWidth(void) const {
         return tvColorBuffer.surface.width;
     }
-    u32 getTvHeight(void) const {
+    uint32_t getTvHeight(void) const {
         return tvColorBuffer.surface.height;
     }
 
-    u32 getDrcWidth(void) const {
+    uint32_t getDrcWidth(void) const {
         return drcColorBuffer.surface.width;
     }
-    u32 getDrcHeight(void) const {
+    uint32_t getDrcHeight(void) const {
         return drcColorBuffer.surface.height;
     }
 
@@ -135,17 +135,17 @@ public:
         return viewMtx;
     }
 
-    f32 getWidthScaleFactor(void) const {
+    float getWidthScaleFactor(void) const {
         return widthScaleFactor;
     }
-    f32 getHeightScaleFactor(void) const {
+    float getHeightScaleFactor(void) const {
         return heightScaleFactor;
     }
-    f32 getDepthScaleFactor(void) const {
+    float getDepthScaleFactor(void) const {
         return depthScaleFactor;
     }
 
-    void screenPosToWorldRay(f32 posX, f32 posY, glm::vec3 & rayOrigin, glm::vec3 & rayDirection)
+    void screenPosToWorldRay(float posX, float posY, glm::vec3 & rayOrigin, glm::vec3 & rayDirection)
     {
         //! normalize positions
         posX = 2.0f * posX * getWidthScaleFactor();
@@ -175,10 +175,10 @@ private:
     void *tvScanBuffer;
     void *drcScanBuffer;
 
-    u32 frameCount;
-    f32 widthScaleFactor;
-    f32 heightScaleFactor;
-    f32 depthScaleFactor;
+    uint32_t frameCount;
+    float widthScaleFactor;
+    float heightScaleFactor;
+    float depthScaleFactor;
 
     bool tvEnabled;
     bool drcEnabled;

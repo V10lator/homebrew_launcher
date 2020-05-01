@@ -36,8 +36,8 @@ int HomebrewLoader::loadToMemory()
         return FILE_OPEN_FAILURE;
     }
 
-    u32 bytesRead = 0;
-    u32 fileSize = file.size();
+    uint32_t bytesRead = 0;
+    uint32_t fileSize = file.size();
 
     progressWindow.setTitle(strfmt("Loading file %s", FullpathToFilename(filepath.c_str())));
 
@@ -52,9 +52,9 @@ int HomebrewLoader::loadToMemory()
     // Copy rpl in memory
     while(bytesRead < fileSize)
     {
-        progressWindow.setProgress(100.0f * (f32)bytesRead / (f32)fileSize);
+        progressWindow.setProgress(100.0f * (float)bytesRead / (float)fileSize);
 
-        u32 blockSize = 0x8000;
+        uint32_t blockSize = 0x8000;
         if(blockSize > (fileSize - bytesRead))
             blockSize = fileSize - bytesRead;
 
@@ -68,7 +68,7 @@ int HomebrewLoader::loadToMemory()
         bytesRead += ret;
     }
 
-    progressWindow.setProgress((f32)bytesRead / (f32)fileSize);
+    progressWindow.setProgress((float)bytesRead / (float)fileSize);
 
     if(bytesRead != fileSize)
     {

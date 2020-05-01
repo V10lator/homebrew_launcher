@@ -18,6 +18,7 @@
 #define _ASYNC_DELETER_H
 
 #include <queue>
+#include <gui/Gui.h>
 #include "CThread.h"
 #include "CMutex.h"
 
@@ -30,14 +31,7 @@ public:
         deleterInstance = NULL;
     }
 
-    class Element
-    {
-    public:
-        Element() {}
-        virtual ~Element() {}
-    };
-
-    static void pushForDelete(AsyncDeleter::Element *e)
+    static void pushForDelete(GuiElement *e)
     {
         if(!deleterInstance)
             deleterInstance = new AsyncDeleter;
@@ -56,8 +50,8 @@ private:
     void executeThread(void);
 
     bool exitApplication;
-    std::queue<AsyncDeleter::Element *> deleteElements;
-    std::queue<AsyncDeleter::Element *> realDeleteElements;
+    std::queue<GuiElement *> deleteElements;
+    std::queue<GuiElement *> realDeleteElements;
     CMutex deleteMutex;
 };
 

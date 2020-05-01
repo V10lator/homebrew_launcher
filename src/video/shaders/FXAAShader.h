@@ -64,9 +64,9 @@ private:
     FXAAShader();
     virtual ~FXAAShader();
 
-    static const u32 cuAttributeCount = 2;
-    static const u32 ciPositionVtxsSize = 4 * cuVertexAttrSize;
-    static const u32 ciTexCoordsVtxsSize = 4 * cuTexCoordAttrSize;
+    static const uint32_t cuAttributeCount = 2;
+    static const uint32_t ciPositionVtxsSize = 4 * cuVertexAttrSize;
+    static const uint32_t ciTexCoordsVtxsSize = 4 * cuTexCoordAttrSize;
 
     static FXAAShader *shaderInstance;
 
@@ -74,13 +74,13 @@ private:
     VertexShader vertexShader;
     PixelShader pixelShader;
 
-    f32 *posVtxs;
-    f32 *texCoords;
+    float *posVtxs;
+    float *texCoords;
 
-    u32 samplerLocation;
-    u32 positionLocation;
-    u32 texCoordLocation;
-    u32 resolutionLocation;
+    uint32_t samplerLocation;
+    uint32_t positionLocation;
+    uint32_t texCoordLocation;
+    uint32_t resolutionLocation;
 };
 
 #endif // __FXAA_SHADER_H_

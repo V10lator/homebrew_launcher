@@ -31,17 +31,17 @@ class Mp3Decoder : public SoundDecoder
 {
 	public:
 		Mp3Decoder(const char * filepath);
-		Mp3Decoder(const u8 * sound, int len);
+		Mp3Decoder(const uint8_t * sound, int len);
 		virtual ~Mp3Decoder();
 		int Rewind();
-		int Read(u8 * buffer, int buffer_size, int pos);
+		int Read(uint8_t * buffer, int buffer_size, int pos);
 	protected:
 		void OpenFile();
 		struct mad_stream Stream;
 		struct mad_frame Frame;
 		struct mad_synth Synth;
 		mad_timer_t Timer;
-		u8 * GuardPtr;
-		u8 * ReadBuffer;
-		u32 SynthPos;
+		uint8_t * GuardPtr;
+		uint8_t * ReadBuffer;
+		uint32_t SynthPos;
 };

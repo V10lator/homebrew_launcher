@@ -46,7 +46,7 @@ public:
 	static void DestroyInstance() { delete handlerInstance; handlerInstance = NULL; }
 
 	void AddDecoder(int voice, const char * filepath);
-	void AddDecoder(int voice, const u8 * snd, int len);
+	void AddDecoder(int voice, const uint8_t * snd, int len);
 	void RemoveDecoder(int voice);
 
 	SoundDecoder * getDecoder(int i) { return ((i < 0 || i >= MAX_DECODERS) ? NULL : DecoderList[i]); };
@@ -64,7 +64,7 @@ protected:
 	void ClearDecoderList();
 
 	SoundDecoder * GetSoundDecoder(const char * filepath);
-	SoundDecoder * GetSoundDecoder(const u8 * sound, int length);
+	SoundDecoder * GetSoundDecoder(const uint8_t * sound, int length);
 
 	static SoundHandler * handlerInstance;
 

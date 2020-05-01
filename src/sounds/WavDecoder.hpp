@@ -30,41 +30,41 @@
 
 typedef struct
 {
-	u32 magicRIFF;
-	u32 size;
-	u32 magicWAVE;
+	uint32_t magicRIFF;
+	uint32_t size;
+	uint32_t magicWAVE;
 } SWaveHdr;
 
 typedef struct
 {
-	u32 magicFMT;
-	u32 size;
-	u16 format;
-	u16 channels;
-	u32 freq;
-	u32 avgBps;
-	u16 alignment;
-	u16 bps;
+	uint32_t magicFMT;
+	uint32_t size;
+	uint16_t format;
+	uint16_t channels;
+	uint32_t freq;
+	uint32_t avgBps;
+	uint16_t alignment;
+	uint16_t bps;
 } SWaveFmtChunk;
 
 typedef struct
 {
-	u32 magicDATA;
-	u32 size;
+	uint32_t magicDATA;
+	uint32_t size;
 } SWaveChunk;
 
 class WavDecoder : public SoundDecoder
 {
 	public:
 		WavDecoder(const char * filepath);
-		WavDecoder(const u8 * snd, int len);
+		WavDecoder(const uint8_t * snd, int len);
 		virtual ~WavDecoder();
-		int Read(u8 * buffer, int buffer_size, int pos);
+		int Read(uint8_t * buffer, int buffer_size, int pos);
 	protected:
 		void OpenFile();
 		void CloseFile();
-		u32 DataOffset;
-		u32 DataSize;
+		uint32_t DataOffset;
+		uint32_t DataSize;
 		bool Is16Bit;
 };
 

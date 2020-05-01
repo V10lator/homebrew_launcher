@@ -2,6 +2,6 @@
 #define HOMEBREW_MEMORY_H_
 
 void HomebrewInitMemory(void);
-int HomebrewCopyMemory(u8 *address, u32 bytes);
+int HomebrewCopyMemory(uint8_t *address, uint32_t bytes);
 
 #endif

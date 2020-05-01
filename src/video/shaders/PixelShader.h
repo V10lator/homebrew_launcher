@@ -38,13 +38,13 @@ public:
             if(pixelShader->program)
                 free(pixelShader->program);
 
-            for(u32 i = 0; i < pixelShader->uniformBlockCount; i++)
+            for(uint32_t i = 0; i < pixelShader->uniformBlockCount; i++)
                 free((void*)pixelShader->uniformBlocks[i].name);
 
             if(pixelShader->uniformBlocks)
                 free((void*)pixelShader->uniformBlocks);
 
-            for(u32 i = 0; i < pixelShader->uniformVarCount; i++)
+            for(uint32_t i = 0; i < pixelShader->uniformVarCount; i++)
                 free((void*)pixelShader->uniformVars[i].name);
 
             if(pixelShader->uniformVars)
@@ -53,7 +53,7 @@ public:
             if(pixelShader->initialValues)
                 free((void*)pixelShader->initialValues);
 
-            for(u32 i = 0; i < pixelShader->samplerVarCount; i++)
+            for(uint32_t i = 0; i < pixelShader->samplerVarCount; i++)
                 free((void*)pixelShader->samplerVars[i].name);
 
             if(pixelShader->samplerVars)
@@ -66,14 +66,14 @@ public:
         }
     }
 
-    void setProgram(const u32 * program, const u32 & programSize, const u32 * regs, const u32 & regsSize)
+    void setProgram(const uint32_t * program, const uint32_t & programSize, const uint32_t * regs, const uint32_t & regsSize)
     {
         if(!pixelShader)
             return;
 
         //! this must be moved into an area where the graphic engine has access to and must be aligned to 0x100
         pixelShader->size = programSize;
-        pixelShader->program = (u8*)memalign(GX2_SHADER_ALIGNMENT, pixelShader->size);
+        pixelShader->program = (uint8_t*)memalign(GX2_SHADER_ALIGNMENT, pixelShader->size);
         if(pixelShader->program)
         {
             memcpy(pixelShader->program, program, pixelShader->size);
@@ -88,7 +88,7 @@ public:
         if(!pixelShader)
             return;
 
-        u32 idx = pixelShader->uniformVarCount;
+        uint32_t idx = pixelShader->uniformVarCount;
 
         GX2UniformVar* newVar = (GX2UniformVar*) malloc((pixelShader->uniformVarCount + 1) * sizeof(GX2UniformVar));
         if(newVar)
@@ -113,7 +113,7 @@ public:
         if(!pixelShader)
             return;
 
-        u32 idx = pixelShader->samplerVarCount;
+        uint32_t idx = pixelShader->samplerVarCount;
 
         GX2SamplerVar* newVar = (GX2SamplerVar*) malloc((pixelShader->samplerVarCount + 1) * sizeof(GX2SamplerVar));
         if(newVar)
@@ -140,7 +140,7 @@ public:
         GX2SetPixelShader(pixelShader);
     }
 
-    static inline void setUniformReg(u32 location, u32 size, const void * reg) {
+    static inline void setUniformReg(uint32_t location, uint32_t size, const void * reg) {
         GX2SetPixelUniformReg(location, size, (uint32_t *)reg);
     }
 protected:

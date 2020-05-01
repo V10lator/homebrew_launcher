@@ -42,7 +42,7 @@ DirList::DirList()
 	Depth = 0;
 }
 
-DirList::DirList(const std::string & path, const char *filter, u32 flags, u32 maxDepth)
+DirList::DirList(const std::string & path, const char *filter, uint32_t flags, uint32_t maxDepth)
 {
 	this->LoadPath(path, filter, flags, maxDepth);
 	this->SortList();
@@ -53,7 +53,7 @@ DirList::~DirList()
 	ClearList();
 }
 
-bool DirList::LoadPath(const std::string & folder, const char *filter, u32 flags, u32 maxDepth)
+bool DirList::LoadPath(const std::string & folder, const char *filter, uint32_t flags, uint32_t maxDepth)
 {
 	if(folder.empty()) return false;
 
@@ -62,7 +62,7 @@ bool DirList::LoadPath(const std::string & folder, const char *filter, u32 flags
 	Depth = maxDepth;
 
 	std::string folderpath(folder);
-	u32 length = folderpath.size();
+	uint32_t length = folderpath.size();
 
 	//! clear path of double slashes
 	RemoveDoubleSlashs(folderpath);
@@ -162,7 +162,7 @@ void DirList::AddEntrie(const std::string &filepath, const char * filename, bool
 
 void DirList::ClearList()
 {
-	for(u32 i = 0; i < FileInfo.size(); ++i)
+	for(uint32_t i = 0; i < FileInfo.size(); ++i)
 	{
 		if(FileInfo[i].FilePath)
 			free(FileInfo[i].FilePath);
@@ -206,7 +206,7 @@ void DirList::SortList(bool (*SortFunc)(const DirEntry &a, const DirEntry &b))
 		std::sort(FileInfo.begin(), FileInfo.end(), SortFunc);
 }
 
-u64 DirList::GetFilesize(int index) const
+uint64_t DirList::GetFilesize(int index) const
 {
 	struct stat st;
 	const char *path = GetFilepath(index);
@@ -222,7 +222,7 @@ int DirList::GetFileIndex(const char *filename) const
 	if(!filename)
 		return -1;
 
-	for (u32 i = 0; i < FileInfo.size(); ++i)
+	for (uint32_t i = 0; i < FileInfo.size(); ++i)
 	{
 		if (strcasecmp(GetFilename(i), filename) == 0)
 			return i;

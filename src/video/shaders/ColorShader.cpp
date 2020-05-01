@@ -18,7 +18,7 @@
 #include <string.h>
 #include "ColorShader.h"
 
-static const u32 cpVertexShaderProgram[] =
+static const uint32_t cpVertexShaderProgram[] =
 {
     0x00000000,0x00008009,0x20000000,0x000078a0,
     0x3c200000,0x88060094,0x00c00000,0x88062014,
@@ -55,7 +55,7 @@ static const u32 cpVertexShaderProgram[] =
     0xfbbdb2ab,0x768ac733
 };
 
-static const u32 cpVertexShaderRegs[] = {
+static const uint32_t cpVertexShaderRegs[] = {
     0x00000103,0x00000000,0x00000000,0x00000001,
     0xffffff00,0xffffffff,0xffffffff,0xffffffff,
     0xffffffff,0xffffffff,0xffffffff,0xffffffff,
@@ -71,7 +71,7 @@ static const u32 cpVertexShaderRegs[] = {
     0x000000ff,0x00000000,0x0000000e,0x00000010
 };
 
-static const u32 cpPixelShaderProgram[] =
+static const uint32_t cpPixelShaderProgram[] =
 {
     0x20000000,0x00000ca0,0x00000000,0x88062094,
     0x00000000,0x00000000,0x00000000,0x00000000,
@@ -93,7 +93,7 @@ static const u32 cpPixelShaderProgram[] =
     0x00082001,0x90000040,0x000ca081,0x90000060,
     0xbb7dd898,0x9746c59c,0xc69b00e7,0x03c36218
 };
-static const u32 cpPixelShaderRegs[] = {
+static const uint32_t cpPixelShaderRegs[] = {
     0x00000001,0x00000002,0x14000001,0x00000000,
     0x00000001,0x00000100,0x00000000,0x00000000,
     0x00000000,0x00000000,0x00000000,0x00000000,
@@ -141,7 +141,7 @@ ColorShader::ColorShader()
     fetchShader = new FetchShader(vertexShader.getAttributeBuffer(), vertexShader.getAttributesCount());
 
     //! model vertex has to be align and cannot be in unknown regions for GX2 like 0xBCAE1000
-    positionVtxs = (f32*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, cuPositionVtxsSize);
+    positionVtxs = (float*)memalign(GX2_VERTEX_BUFFER_ALIGNMENT, cuPositionVtxsSize);
     if(positionVtxs)
     {
         //! position vertex structure
