@@ -50,6 +50,7 @@ int HomebrewCopyMemory(uint8_t *address, uint32_t bytes)
 
         memcpy((void*)(targetAddress + ELF_DATA_SIZE), address, bytes);
         ELF_DATA_SIZE += bytes;
+        MAIN_ENTRY_ADDR = 0xDEADC0DE;
     }
     else
     {
