@@ -38,17 +38,17 @@ public:
     {
         lastData = data;
 
-        s32 vpadError = -1;
+        VPADReadError vpadError = VPAD_READ_NO_SAMPLES;
         VPADRead(0, &vpad, 1, &vpadError);
 
-        if(vpadError == 0){
-            data.buttons_r = vpad.btns_r;
-            data.buttons_h = vpad.btns_h;
-            data.buttons_d = vpad.btns_d;
-            data.validPointer = !vpad.tpdata.invalid;
-            data.touched = vpad.tpdata.touched;
+        if(vpadError == VPAD_READ_SUCCESS){
+            data.buttons_r = vpad.release;
+            data.buttons_h = vpad.hold;
+            data.buttons_d = vpad.trigger;
+            data.validPointer = vpad.tpNormal.validity == 0;
+            data.touched = vpad.tpNormal.touched;
 
-            VPADGetTPCalibratedPoint(0, &tpCalib, &vpad.tpdata1);
+            VPADGetTPCalibratedPoint(0, &tpCalib, &vpad.tpNormal);
 
             //! calculate the screen offsets
             data.x = -(width >> 1) + (s32)(((float)tpCalib.x / 1280.0f) * (float)width);
@@ -60,8 +60,8 @@ public:
     }
 
 private:
-    VPADData vpad;
-    VPADTPData tpCalib;
+    VPADStatus vpad;
+    VPADTouchData tpCalib;
 };
 
 #endif
