@@ -1,7 +1,7 @@
 /****************************************************************************
  * Loadiine resource files.
  * This file is generated automatically.
- * Includes 13 files.
+ * Includes 16 files.
  *
  * NOTE:
  * Any manual modification of this file will be overwriten by the generation.
@@ -27,11 +27,17 @@ extern const unsigned int button_click_mp3_size;
 extern const unsigned char button_png[];
 extern const unsigned int button_png_size;
 
+extern const unsigned char buttonSelected_png[];
+extern const unsigned int buttonSelected_png_size;
+
 extern const unsigned char font_ttf[];
 extern const unsigned int font_ttf_size;
 
 extern const unsigned char homebrewButton_png[];
 extern const unsigned int homebrewButton_png_size;
+
+extern const unsigned char homebrewButtonSelected_png[];
+extern const unsigned int homebrewButtonSelected_png_size;
 
 extern const unsigned char launchMenuBox_png[];
 extern const unsigned int launchMenuBox_png_size;
@@ -39,8 +45,8 @@ extern const unsigned int launchMenuBox_png_size;
 extern const unsigned char leftArrow_png[];
 extern const unsigned int leftArrow_png_size;
 
-extern const u8 player0_point_png[];
-extern const u32 player0_point_png_size;
+extern const unsigned char player0_point_png[];
+extern const unsigned int player0_point_png_size;
 
 extern const unsigned char player1_point_png[];
 extern const unsigned int player1_point_png_size;
@@ -65,8 +71,10 @@ static RecourceFile RecourceList[] =
 	{"bgMusic.ogg", bgMusic_ogg, bgMusic_ogg_size, NULL, 0},
 	{"button_click.mp3", button_click_mp3, button_click_mp3_size, NULL, 0},
 	{"button.png", button_png, button_png_size, NULL, 0},
+	{"buttonSelected.png", buttonSelected_png, buttonSelected_png_size, NULL, 0},
 	{"font.ttf", font_ttf, font_ttf_size, NULL, 0},
 	{"homebrewButton.png", homebrewButton_png, homebrewButton_png_size, NULL, 0},
+	{"homebrewButtonSelected.png", homebrewButtonSelected_png, homebrewButtonSelected_png_size, NULL, 0},
 	{"launchMenuBox.png", launchMenuBox_png, launchMenuBox_png_size, NULL, 0},
 	{"leftArrow.png", leftArrow_png, leftArrow_png_size, NULL, 0},
 	{"player0_point.png", player0_point_png, player0_point_png_size, NULL, 0},
