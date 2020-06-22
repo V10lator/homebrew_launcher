@@ -8,7 +8,7 @@
 #define CONTROLLER_BASE_H_
 
 #include <gui/GuiController.h>
-#include "dynamic_libs/vpad_functions.h"
+#include <vpad/input.h>
 
 #define POINTER_TIMEOUT 250
 
