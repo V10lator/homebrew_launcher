@@ -71,6 +71,7 @@ private:
     GuiSound *bgMusic;
     CVideo *video;
     MainWindow *mainWindow;
+    FreeTypeGX *fontSystem;
     ControllerBase *controller[5];
     int exitCode;
 };
