@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 #include "GuiButton.h"
+#include "GuiTrigger.h"
 #include "GuiController.h"
 
 /**
@@ -32,14 +33,14 @@ GuiButton::GuiButton(f32 w, f32 h)
 	icon = NULL;
 	iconOver = NULL;
 
-	for(int i = 0; i < 4; i++)
+	for(s32 i = 0; i < 4; i++)
 	{
 		label[i] = NULL;
 		labelOver[i] = NULL;
 		labelHold[i] = NULL;
 		labelClick[i] = NULL;
 	}
-	for(int i = 0; i < iMaxGuiTriggers; i++)
+	for(s32 i = 0; i < iMaxGuiTriggers; i++)
 	{
 		trigger[i] = NULL;
 	}
@@ -92,22 +93,22 @@ void GuiButton::setIconOver(GuiImage* img)
 	if(img) img->setParent(this);
 }
 
-void GuiButton::setLabel(GuiText* txt, int n)
+void GuiButton::setLabel(GuiText* txt, s32 n)
 {
 	label[n] = txt;
 	if(txt) txt->setParent(this);
 }
-void GuiButton::setLabelOver(GuiText* txt, int n)
+void GuiButton::setLabelOver(GuiText* txt, s32 n)
 {
 	labelOver[n] = txt;
 	if(txt) txt->setParent(this);
 }
-void GuiButton::setLabelHold(GuiText* txt, int n)
+void GuiButton::setLabelHold(GuiText* txt, s32 n)
 {
 	labelHold[n] = txt;
 	if(txt) txt->setParent(this);
 }
-void GuiButton::setLabelClick(GuiText* txt, int n)
+void GuiButton::setLabelClick(GuiText* txt, s32 n)
 {
 	labelClick[n] = txt;
 	if(txt) txt->setParent(this);
@@ -126,7 +127,7 @@ void GuiButton::setSoundClick(GuiSound * snd)
 	soundClick = snd;
 }
 
-void GuiButton::setTrigger(GuiTrigger * t, int idx)
+void GuiButton::setTrigger(GuiTrigger * t, s32 idx)
 {
     if(idx >= 0 && idx < iMaxGuiTriggers)
     {
@@ -134,7 +135,7 @@ void GuiButton::setTrigger(GuiTrigger * t, int idx)
     }
     else
     {
-        for(int i = 0; i < iMaxGuiTriggers; i++)
+        for(s32 i = 0; i < iMaxGuiTriggers; i++)
         {
             if(!trigger[i])
             {
@@ -161,18 +162,20 @@ void GuiButton::draw(CVideo *v)
 		return;
 
 	// draw image
-	if(isStateSet(STATE_OVER | STATE_SELECTED | STATE_CLICKED | STATE_HELD) && imageOver)
+	if((isDrawOverOnlyWhenSelected() && (isStateSet(STATE_SELECTED) && imageOver)) ||
+      (!isDrawOverOnlyWhenSelected() && (isStateSet(STATE_OVER | STATE_SELECTED | STATE_CLICKED | STATE_HELD) && imageOver)))
 		imageOver->draw(v);
 	else if(image)
 		image->draw(v);
 
-	if(isStateSet(STATE_OVER | STATE_SELECTED | STATE_CLICKED | STATE_HELD) && iconOver)
+	if((isDrawOverOnlyWhenSelected() && (isStateSet(STATE_SELECTED) && iconOver)) ||
+      (!isDrawOverOnlyWhenSelected() && (isStateSet(STATE_OVER | STATE_SELECTED | STATE_CLICKED | STATE_HELD) && iconOver)))
 		iconOver->draw(v);
 	else if(icon)
 		icon->draw(v);
 
 	// draw text
-	for(int i = 0; i < 4; i++)
+	for(s32 i = 0; i < 4; i++)
 	{
 		if(isStateSet(STATE_OVER | STATE_SELECTED | STATE_CLICKED | STATE_HELD) && labelOver[i])
 			labelOver[i]->draw(v);
@@ -183,18 +186,18 @@ void GuiButton::draw(CVideo *v)
 
 void GuiButton::update(GuiController * c)
 {
-	if(!c || isStateSet(STATE_DISABLED, c->chan) || isStateSet(STATE_HIDDEN, c->chan))
+	if(!c || isStateSet(STATE_DISABLED|STATE_HIDDEN|STATE_DISABLE_INPUT, c->chanIdx))
 		return;
-	else if(parentElement && (parentElement->isStateSet(STATE_DISABLED, c->chan) || parentElement->isStateSet(STATE_HIDDEN, c->chan)))
+	else if(parentElement && (parentElement->isStateSet(STATE_DISABLED|STATE_HIDDEN|STATE_DISABLE_INPUT, c->chanIdx)))
 		return;
 
     if(selectable)
     {
 		if(c->data.validPointer && this->isInside(c->data.x, c->data.y))
 		{
-			if(!isStateSet(STATE_OVER, c->chan))
+			if(!isStateSet(STATE_OVER, c->chanIdx))
 			{
-			    setState(STATE_OVER, c->chan);
+			    setState(STATE_OVER, c->chanIdx);
 
 				//if(this->isRumbleActive())
 				//	this->rumble(t->chan);
@@ -213,9 +216,9 @@ void GuiButton::update(GuiController * c)
                 pointedOn(this, c);
 			}
 		}
-		else if(isStateSet(STATE_OVER, c->chan))
+		else if(isStateSet(STATE_OVER, c->chanIdx))
         {
-            this->clearState(STATE_OVER, c->chan);
+            this->clearState(STATE_OVER, c->chanIdx);
             pointedOff(this, c);
 
 			if(effectTarget == effectTargetOver && effectAmount == effectAmountOver)
@@ -228,7 +231,7 @@ void GuiButton::update(GuiController * c)
         }
     }
 
-    for(int i = 0; i < iMaxGuiTriggers; i++)
+    for(s32 i = 0; i < iMaxGuiTriggers; i++)
     {
         if(!trigger[i])
             continue;
@@ -236,26 +239,34 @@ void GuiButton::update(GuiController * c)
         // button triggers
         if(clickable)
         {
-            bool isClicked = trigger[i]->clicked(c);
 
-            if(   !clickedTrigger && isClicked
-               && (trigger[i]->isClickEverywhere() || (isStateSet(STATE_SELECTED | STATE_OVER, c->chan) && trigger[i]->isSelectionClickEverywhere()) || this->isInside(c->data.x, c->data.y)))
+            s32 isClicked = trigger[i]->clicked(c);
+
+            if(   !clickedTrigger && (isClicked != GuiTrigger::CLICKED_NONE)
+               && (trigger[i]->isClickEverywhere() || (isStateSet(STATE_SELECTED | STATE_OVER, c->chanIdx) && trigger[i]->isSelectionClickEverywhere()) || this->isInside(c->data.x, c->data.y)))
             {
                 if(soundClick)
                     soundClick->Play();
 
                 clickedTrigger = trigger[i];
 
-                if(!isStateSet(STATE_CLICKED, c->chan))
-                    setState(STATE_CLICKED, c->chan);
+                if(!isStateSet(STATE_CLICKED, c->chanIdx)){
+                    if(isClicked == GuiTrigger::CLICKED_TOUCH){
+                        setState(STATE_CLICKED_TOUCH, c->chanIdx);
+                    }else{
+                        setState(STATE_CLICKED, c->chanIdx);
+                    }
+                }
 
                 clicked(this, c, trigger[i]);
             }
-            else if(isStateSet(STATE_CLICKED, c->chan) && (clickedTrigger == trigger[i]) && !isStateSet(STATE_HELD, c->chan) && !trigger[i]->held(c) && (!isClicked || trigger[i]->released(c)))
+            else if((isStateSet(STATE_CLICKED, c->chanIdx) || isStateSet(STATE_CLICKED_TOUCH, c->chanIdx)) && (clickedTrigger == trigger[i]) && !isStateSet(STATE_HELD, c->chanIdx) && !trigger[i]->held(c) && ((isClicked == GuiTrigger::CLICKED_NONE) || trigger[i]->released(c)))
             {
-                clickedTrigger = NULL;
-                clearState(STATE_CLICKED, c->chan);
-                released(this, c, trigger[i]);
+                if((isStateSet(STATE_CLICKED_TOUCH, c->chanIdx) && this->isInside(c->data.x, c->data.y)) || (isStateSet(STATE_CLICKED, c->chanIdx))){
+                    clickedTrigger = NULL;
+                    clearState(STATE_CLICKED, c->chanIdx);
+                    released(this, c, trigger[i]);
+                }
             }
         }
 
@@ -264,25 +275,25 @@ void GuiButton::update(GuiController * c)
             bool isHeld = trigger[i]->held(c);
 
             if(   (!heldTrigger || heldTrigger == trigger[i]) && isHeld
-               && (trigger[i]->isHoldEverywhere() || (isStateSet(STATE_SELECTED | STATE_OVER, c->chan) && trigger[i]->isSelectionClickEverywhere()) || this->isInside(c->data.x, c->data.y)))
+               && (trigger[i]->isHoldEverywhere() || (isStateSet(STATE_SELECTED | STATE_OVER, c->chanIdx) && trigger[i]->isSelectionClickEverywhere()) || this->isInside(c->data.x, c->data.y)))
             {
                 heldTrigger = trigger[i];
 
-                if(!isStateSet(STATE_HELD, c->chan))
-                    setState(STATE_HELD, c->chan);
+                if(!isStateSet(STATE_HELD, c->chanIdx))
+                    setState(STATE_HELD, c->chanIdx);
 
                 held(this, c, trigger[i]);
             }
-            else if(isStateSet(STATE_HELD, c->chan) && (heldTrigger == trigger[i]) && (!isHeld || trigger[i]->released(c)))
+            else if(isStateSet(STATE_HELD, c->chanIdx) && (heldTrigger == trigger[i]) && (!isHeld || trigger[i]->released(c)))
             {
                 //! click is removed at this point and converted to held
                 if(clickedTrigger == trigger[i])
                 {
                     clickedTrigger = NULL;
-                    clearState(STATE_CLICKED, c->chan);
+                    clearState(STATE_CLICKED, c->chanIdx);
                 }
                 heldTrigger = NULL;
-                clearState(STATE_HELD, c->chan);
+                clearState(STATE_HELD, c->chanIdx);
                 released(this, c, trigger[i]);
             }
         }

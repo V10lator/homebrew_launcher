@@ -212,6 +212,11 @@ class GuiElement : public AsyncDeleter::Element
 		{
 			return !isStateSet(STATE_DISABLED) && selectable;
 		}
+		virtual bool isDrawOverOnlyWhenSelected()
+        {
+            return drawOverOnlyWhenSelected;
+        }
+        virtual void setdrawOverOnlyWhenSelected(bool s) { drawOverOnlyWhenSelected = s; }
 		//!Checks whether or not the element is clickable
 		//!\return true if clickable, false otherwise
 		virtual bool isClickable()
@@ -235,13 +240,13 @@ class GuiElement : public AsyncDeleter::Element
         //!\param c Controller channel (0-3, -1 = none)
         virtual void setState(int s, int c = -1)
         {
-            if(c >= 0 && c < 4)
+            if(c >= 0 && c < 5)
             {
                 state[c] |= s;
             }
             else
             {
-                for(int i = 0; i < 4; i++)
+                for(int i = 0; i < 5; i++)
                     state[i] |= s;
             }
             stateChan = c;
@@ -249,13 +254,13 @@ class GuiElement : public AsyncDeleter::Element
         }
         virtual void clearState(int s, int c = -1)
         {
-            if(c >= 0 && c < 4)
+            if(c >= 0 && c < 5)
             {
                 state[c] &= ~s;
             }
             else
             {
-                for(int i = 0; i < 4; i++)
+                for(int i = 0; i < 5; i++)
                     state[i] &= ~s;
             }
             stateChan = c;
@@ -263,13 +268,13 @@ class GuiElement : public AsyncDeleter::Element
         }
         virtual bool isStateSet(int s, int c = -1) const
         {
-            if(c >= 0 && c < 4)
+            if(c >= 0 && c < 5)
             {
                 return (state[c] & s) != 0;
             }
             else
             {
-                for(int i = 0; i < 4; i++)
+                for(int i = 0; i < 5; i++)
                    if((state[i] & s) != 0)
                         return true;
 
@@ -285,7 +290,7 @@ class GuiElement : public AsyncDeleter::Element
 		//!Resets the element's state to STATE_DEFAULT
 		virtual void resetState()
 		{
-            for(int i = 0; i < 4; i++)
+            for(int i = 0; i < 5; i++)
                 state[i] = STATE_DEFAULT;
             stateChan = -1;
 		}
@@ -459,6 +464,8 @@ class GuiElement : public AsyncDeleter::Element
             STATE_HELD = 0x04,
             STATE_OVER = 0x08,
             STATE_HIDDEN = 0x10,
+            STATE_DISABLE_INPUT = 0x20,
+            STATE_CLICKED_TOUCH = 0x40,
             STATE_DISABLED = 0x80
         };
 
@@ -486,6 +493,7 @@ class GuiElement : public AsyncDeleter::Element
 		bool selectable; //!< Whether or not this element selectable (can change to SELECTED state)
 		bool clickable; //!< Whether or not this element is clickable (can change to CLICKED state)
 		bool holdable; //!< Whether or not this element is holdable (can change to HELD state)
+		bool drawOverOnlyWhenSelected; //!< Whether or not this element is holdable (can change to HELD state)
 		f32 width; //!< Element width
 		f32 height; //!< Element height
 		f32 xoffset; //!< Element X offset
@@ -497,7 +505,7 @@ class GuiElement : public AsyncDeleter::Element
 		f32 scaleY; //!< Element scale (1 = 100%)
 		f32 scaleZ; //!< Element scale (1 = 100%)
 		int alignment; //!< Horizontal element alignment, respective to parent element
-		int state[4]; //!< Element state (DEFAULT, SELECTED, CLICKED, DISABLED)
+		int state[5]; //!< Element state (DEFAULT, SELECTED, CLICKED, DISABLED)
 		int stateChan; //!< Which controller channel is responsible for the last change in state
 		GuiElement * parentElement; //!< Parent element
 

@@ -23,6 +23,11 @@
 class GuiTrigger
 {
 public:
+    enum eClicked{
+        CLICKED_NONE        = 0x00,
+        CLICKED_TOUCH       = 0x01,
+        CLICKED_BUTTON      = 0x02,
+    };
     enum eChannels {
         CHANNEL_1       = 0x01,
         CHANNEL_2       = 0x02,

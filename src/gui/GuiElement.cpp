@@ -34,7 +34,7 @@ GuiElement::GuiElement()
 	scaleX = 1.0f;
 	scaleY = 1.0f;
 	scaleZ = 1.0f;
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 5; i++)
         state[i] = STATE_DEFAULT;
 	stateChan = -1;
 	parentElement = NULL;
@@ -42,6 +42,7 @@ GuiElement::GuiElement()
 	selectable = false;
 	clickable = false;
 	holdable = false;
+	drawOverOnlyWhenSelected = false;
 	visible = true;
 	yoffsetDyn = 0;
 	xoffsetDyn = 0;
