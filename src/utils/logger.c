@@ -74,19 +74,10 @@ void log_printf(const char *format, ...)
 
 	char * tmp = NULL;
 
-<<<<<<< HEAD
-	va_list va;
-	va_start(va, format);
-	if((vasprintf(&tmp, format, va) >= 0) && tmp)
-	{
-        log_print(tmp);
-	}
-=======
 	size_t tss = strlen(newStr) - 1;
 	newStr[tss - 1] = '\0'; // Hacky way to get rid of the newline
 	
 	vsnprintf(newStr + tss, 2048 - tss, format, va);
->>>>>>> 980e22b... dark
 	va_end(va);
 
 	if(tmp)
