@@ -21,8 +21,8 @@ ProgressWindow::ProgressWindow(const std::string & title)
     : GuiFrame(0, 0)
     , bgImageData(Resources::GetImageData("progressWindow.png"))
     , bgImage(bgImageData)
-    , progressImageBlack(bgImage.getWidth(), bgImage.getHeight()/2, (GX2Color){255, 255, 255, 255})
-    , progressImageColored(bgImage.getWidth(), bgImage.getHeight()/2, (GX2Color){255, 255, 255, 255})
+    , progressImageBlack(bgImage.getWidth(), bgImage.getHeight()/2, (GX2Color){0, 0, 0, 255})
+    , progressImageColored(bgImage.getWidth(), bgImage.getHeight()/2, (GX2Color){0, 0, 0, 255})
 {
     titleChanged = false;
     currentTitle = title;
@@ -34,10 +34,10 @@ ProgressWindow::ProgressWindow(const std::string & title)
     append(&bgImage);
 
     progressImageColored.setAlignment(ALIGN_TOP_LEFT);
-    progressImageColored.setImageColor((GX2Color){ 42, 159, 217, 255}, 0);
-    progressImageColored.setImageColor((GX2Color){ 42, 159, 217, 255}, 1);
-    progressImageColored.setImageColor((GX2Color){ 13, 104, 133, 255}, 2);
-    progressImageColored.setImageColor((GX2Color){ 13, 104, 133, 255}, 3);
+    progressImageColored.setImageColor((GX2Color){ 0, 17, 32, 255}, 0);
+    progressImageColored.setImageColor((GX2Color){ 0, 17, 32, 255}, 1);
+    progressImageColored.setImageColor((GX2Color){ 0, 0, 0, 255}, 2);
+    progressImageColored.setImageColor((GX2Color){ 0, 0, 0, 255}, 3);
 
     titleText.setColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
     titleText.setFontSize(36);

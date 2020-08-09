@@ -27,10 +27,10 @@ MainWindow::MainWindow(int w, int h)
     , bgParticleImg(w, h, 500)
     , homebrewWindow(w, h)
 {
-    bgImageColor.setImageColor((GX2Color){  42, 128, 211, 255 }, 0); // 79, 153, 239, 255
-    bgImageColor.setImageColor((GX2Color){  42, 128, 211, 255 }, 1);
-    bgImageColor.setImageColor((GX2Color){  59, 159, 223, 255 }, 2);
-    bgImageColor.setImageColor((GX2Color){  59, 159, 223, 255 }, 3);
+    bgImageColor.setImageColor((GX2Color){  0, 17, 32, 255 }, 0); // 79, 153, 239, 255
+    bgImageColor.setImageColor((GX2Color){  0, 17, 32, 255 }, 1);
+    bgImageColor.setImageColor((GX2Color){  0, 0, 0, 255 }, 2);
+    bgImageColor.setImageColor((GX2Color){  0, 0, 0, 255 }, 3);
     append(&bgImageColor);
     append(&bgParticleImg);
 
