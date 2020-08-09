@@ -136,10 +136,10 @@ public:
         WPADExtensionType controller_type;
         
         //! check if the controller is connected
-        if(WPADProbe((WPADChan) chanIdx, &controller_type) != 0)
+        if(WPADProbe((WPADChan) (chanIdx - 1), &controller_type) != 0)
             return false;
         
-        KPADRead((WPADChan) chanIdx, &kpadData, 1);
+        KPADRead((WPADChan) (chanIdx - 1), &kpadData, 1);
         
         if(kpadData.extensionType <= 1)
         {        

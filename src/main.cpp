@@ -30,6 +30,9 @@ extern "C" int Menu_Main(void)
     //! initialize homebrew memory layout
     HomebrewInitMemory();
 
+    KPADInit();
+    WPADEnableURCC(1);
+
     //!*******************************************************************
     //!                    Enter main application                        *
     //!*******************************************************************
