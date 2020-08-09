@@ -247,7 +247,7 @@ void HomebrewWindow::OnHomebrewButtonClick(GuiButton *button, const GuiControlle
         return;
     }
 
-    for(u32 i = 0; i < homebrewButtons.size(); i++)
+    for(uint32_t i = 0; i < homebrewButtons.size(); i++)
     {
         if(button == homebrewButtons[i].button)
         {
@@ -415,7 +415,7 @@ void HomebrewWindow::draw(CVideo *pVideo)
 
         clearSelections();
 
-        for(u32 i = 0; i < homebrewButtons.size(); i++)
+        for(uint32_t i = 0; i < homebrewButtons.size(); i++)
         {
             float fXOffset = (i / MAX_BUTTONS_ON_PAGE) * getWidth();
             float fYOffset = (homebrewButtons[i].image->getHeight() + 20.0f) * 1.5f - (homebrewButtons[i].image->getHeight() + 20) * (i % MAX_BUTTONS_ON_PAGE);

@@ -24,7 +24,7 @@ class DVPadController : public ControllerBase
 {
 public:
     //!Constructor
-    DVPadController(s32 channel)
+    DVPadController(int32_t channel)
         : ControllerBase(channel)
     {
         memset(&vpad, 0, sizeof(vpad));
@@ -34,12 +34,12 @@ public:
     //!Destructor
     virtual ~DVPadController()  {}
 
-    bool update(s32 width, s32 height)
+    bool update(int32_t width, int32_t height)
     {
         lastData = data;
 
         VPADReadError vpadError = VPAD_READ_NO_SAMPLES;
-        VPADRead(0, &vpad, 1, &vpadError);
+        VPADRead(VPAD_CHAN_0, &vpad, 1, &vpadError);
 
         if(vpadError == VPAD_READ_SUCCESS){
             data.buttons_r = vpad.release;
@@ -48,11 +48,11 @@ public:
             data.validPointer = vpad.tpNormal.validity == 0;
             data.touched = vpad.tpNormal.touched;
 
-            VPADGetTPCalibratedPoint(0, &tpCalib, &vpad.tpNormal);
+            VPADGetTPCalibratedPoint(VPAD_CHAN_0, &tpCalib, &vpad.tpNormal);
 
             //! calculate the screen offsets
-            data.x = -(width >> 1) + (s32)(((float)tpCalib.x / 1280.0f) * (float)width);
-            data.y = -(height >> 1) + (s32)(float)height - (((float)tpCalib.y / 720.0f) * (float)height);
+            data.x = -(width >> 1) + (int32_t)(((float)tpCalib.x / 1280.0f) * (float)width);
+            data.y = -(height >> 1) + (int32_t)(float)height - (((float)tpCalib.y / 720.0f) * (float)height);
 
             return true;
         }
