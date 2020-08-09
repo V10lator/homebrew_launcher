@@ -2,6 +2,7 @@
 #define RECOURCES_H_
 
 #include <map>
+#include <string>
 #include "common/types.h"
 
 //! forward declaration

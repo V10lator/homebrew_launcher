@@ -150,23 +150,23 @@ $(OFILES_SRC)	: $(HFILES_BIN)
 #-------------------------------------------------------------------------------
 %.bin.o	%_bin.h :	%.bin
 	@echo $(notdir $<)
-	@$(bin2o)
+	bin2s -a 32 $< | $(AS) -o $(<F).o
 
 %.png.o	%_png.h :	%.png
 	@echo $(notdir $<)
-	@$(bin2o)
+	bin2s -a 32 $< | $(AS) -o $(<F).o
 	
 %.ogg.o	%_ogg.h :	%.ogg
 	@echo $(notdir $<)
-	@$(bin2o)	
+	bin2s -a 32  $< | $(AS) -o $(<F).o	
 	
 %.mp3.o	%_mp3.h :	%.mp3
 	@echo $(notdir $<)
-	@$(bin2o)	
+	bin2s -a 32  $< | $(AS) -o $(<F).o	
 	
 %.ttf.o	%_ttf.h :	%.ttf
 	@echo $(notdir $<)
-	@$(bin2o)	
+	bin2s -a 32  $< | $(AS) -o $(<F).o	
 	
 
 -include $(DEPENDS)
