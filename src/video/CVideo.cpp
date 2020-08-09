@@ -77,7 +77,6 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
     }
 
     s32 tvAAMode = GX2_AA_MODE1X;
-    s32 drcAAMode = GX2_AA_MODE4X;
 
     //! calculate the scale factor for later texture resize
     widthScaleFactor = 1.0f / (f32)tvWidth;
@@ -113,17 +112,10 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
     GX2InitDepthBufferHiZEnable(&tvDepthBuffer, GX2_DISABLE);
 
     //! Setup color buffer for DRC rendering
-    GX2InitColorBuffer(&drcColorBuffer, GX2_SURFACE_DIM_TEXTURE_2D, 854, 480, 1, GX2_SURFACE_FORMAT_UNORM_R8_G8_B8_A8, (GX2AAMode)drcAAMode);
+    GX2InitColorBuffer(&drcColorBuffer, GX2_SURFACE_DIM_TEXTURE_2D, 854, 480, 1, GX2_SURFACE_FORMAT_UNORM_R8_G8_B8_A8, (GX2AAMode)tvAAMode);
     drcColorBuffer.surface.image = MEM1_alloc(drcColorBuffer.surface.imageSize, drcColorBuffer.surface.alignment);
     GX2Invalidate(GX2_INVALIDATE_MODE_CPU, drcColorBuffer.surface.image, drcColorBuffer.surface.imageSize);
 
-    //! Setup DRC depth buffer (can be the same for both if rendered one after another)
-    GX2InitDepthBuffer(&drcDepthBuffer, GX2_SURFACE_DIM_TEXTURE_2D, drcColorBuffer.surface.width, drcColorBuffer.surface.height, 1, GX2_SURFACE_FORMAT_FLOAT_R32, (GX2AAMode)drcAAMode);
-    drcDepthBuffer.surface.image = MEM1_alloc(drcDepthBuffer.surface.imageSize, drcDepthBuffer.surface.alignment);
-    GX2Invalidate(GX2_INVALIDATE_MODE_CPU, drcDepthBuffer.surface.image, drcDepthBuffer.surface.imageSize);
-
-    //! Setup DRC HiZ buffer
-    GX2InitDepthBufferHiZEnable(&drcDepthBuffer, GX2_DISABLE);
 
 
     //! allocate auxilary buffer last as there might not be enough MEM1 left for other stuff after that
@@ -167,7 +159,7 @@ CVideo::CVideo(s32 forceTvScanMode, s32 forceDrcScanMode)
 
     GX2SetContextState(drcContextState);
     GX2SetColorBuffer(&drcColorBuffer, GX2_RENDER_TARGET_0);
-    GX2SetDepthBuffer(&drcDepthBuffer);
+    GX2SetDepthBuffer(&tvDepthBuffer);
 
     //! set initial viewport
     GX2SetViewport(0.0f, 0.0f, tvColorBuffer.surface.width, tvColorBuffer.surface.height, 0.0f, 1.0f);
@@ -212,7 +204,6 @@ CVideo::~CVideo()
     MEM1_free(drcColorBuffer.surface.image);
     //! free depth buffers
     MEM1_free(tvDepthBuffer.surface.image);
-    MEM1_free(drcDepthBuffer.surface.image);
     //! free context buffers
     MEM2_free(tvContextState);
     MEM2_free(drcContextState);
