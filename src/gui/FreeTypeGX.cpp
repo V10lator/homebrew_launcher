@@ -210,7 +210,7 @@ ftgxCharData * FreeTypeGX::cacheGlyphData(wchar_t charCode, int16_t pixelSize)
     }
 
 	gIndex = FT_Get_Char_Index(ftFace, (FT_ULong) charCode);
-	if (gIndex != 0 && FT_Load_Glyph(ftFace, gIndex, FT_LOAD_DEFAULT | FT_LOAD_RENDER) == 0)
+	if (gIndex != 0 && FT_Load_Glyph(ftFace, gIndex, FT_LOAD_TARGET_LIGHT | FT_LOAD_RENDER) == 0)
 	{
 		if (ftFace->glyph->format == FT_GLYPH_FORMAT_BITMAP)
 		{
