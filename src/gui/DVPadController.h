@@ -1,3 +1,4 @@
+#include "../gctypes.h"
 /****************************************************************************
  * Copyright (C) 2015 Dimok
  *
@@ -39,7 +40,7 @@ public:
         lastData = data;
 
         VPADReadError vpadError = VPAD_READ_NO_SAMPLES;
-        VPADRead(0, &vpad, 1, &vpadError);
+        VPADRead(VPAD_CHAN_0, &vpad, 1, &vpadError);
 
         if(vpadError == VPAD_READ_SUCCESS){
             data.buttons_r = vpad.release;
@@ -48,7 +49,7 @@ public:
             data.validPointer = vpad.tpNormal.validity == 0;
             data.touched = vpad.tpNormal.touched;
 
-            VPADGetTPCalibratedPoint(0, &tpCalib, &vpad.tpNormal);
+            VPADGetTPCalibratedPoint(VPAD_CHAN_0, &tpCalib, &vpad.tpNormal);
 
             //! calculate the screen offsets
             data.x = -(width >> 1) + (s32)(((float)tpCalib.x / 1280.0f) * (float)width);

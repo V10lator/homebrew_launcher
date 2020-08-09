@@ -1,3 +1,4 @@
+#include "../gctypes.h"
 /****************************************************************************
  * Loadiine resource files.
  * This file is generated automatically.
@@ -9,6 +10,23 @@
 #ifndef _FILELIST_H_
 #define _FILELIST_H_
 
+#include "bgMusic_ogg.h"
+#include "button_click_mp3.h"
+#include "button_png.h"
+#include "buttonSelected_png.h"
+#include "font_ttf.h"
+#include "homebrewButton_png.h"
+#include "homebrewButtonSelected_png.h"
+#include "launchMenuBox_png.h"
+#include "leftArrow_png.h"
+#include "player0_point_png.h"
+#include "player1_point_png.h"
+#include "player2_point_png.h"
+#include "player3_point_png.h"
+#include "player4_point_png.h"
+#include "progressWindow_png.h"
+#include "rightArrow_png.h"
+
 typedef struct _RecourceFile
 {
 	const char          *filename;
@@ -17,54 +35,6 @@ typedef struct _RecourceFile
 	unsigned char	    *CustomFile;
 	unsigned int        CustomFileSize;
 } RecourceFile;
-
-extern const unsigned char bgMusic_ogg[];
-extern const unsigned int bgMusic_ogg_size;
-
-extern const unsigned char button_click_mp3[];
-extern const unsigned int button_click_mp3_size;
-
-extern const unsigned char button_png[];
-extern const unsigned int button_png_size;
-
-extern const unsigned char buttonSelected_png[];
-extern const unsigned int buttonSelected_png_size;
-
-extern const unsigned char font_ttf[];
-extern const unsigned int font_ttf_size;
-
-extern const unsigned char homebrewButton_png[];
-extern const unsigned int homebrewButton_png_size;
-
-extern const unsigned char homebrewButtonSelected_png[];
-extern const unsigned int homebrewButtonSelected_png_size;
-
-extern const unsigned char launchMenuBox_png[];
-extern const unsigned int launchMenuBox_png_size;
-
-extern const unsigned char leftArrow_png[];
-extern const unsigned int leftArrow_png_size;
-
-extern const unsigned char player0_point_png[];
-extern const unsigned int player0_point_png_size;
-
-extern const unsigned char player1_point_png[];
-extern const unsigned int player1_point_png_size;
-
-extern const unsigned char player2_point_png[];
-extern const unsigned int player2_point_png_size;
-
-extern const unsigned char player3_point_png[];
-extern const unsigned int player3_point_png_size;
-
-extern const unsigned char player4_point_png[];
-extern const unsigned int player4_point_png_size;
-
-extern const unsigned char progressWindow_png[];
-extern const unsigned int progressWindow_png_size;
-
-extern const unsigned char rightArrow_png[];
-extern const unsigned int rightArrow_png_size;
 
 static RecourceFile RecourceList[] =
 {

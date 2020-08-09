@@ -1,3 +1,4 @@
+#include "../gctypes.h"
 /*
  * FreeTypeGX is a wrapper class for libFreeType which renders a compiled
  * FreeType parsable font into a GX texture for Wii homebrew development.
@@ -284,7 +285,7 @@ void FreeTypeGX::loadGlyphData(FT_Bitmap *bmp, ftgxCharData *charData)
 
 	uint8_t *src = (uint8_t *)bmp->buffer;
 	uint16_t *dst = (uint16_t *)charData->texture->surface.image;
-	int32_t x, y;
+	uint32_t x, y;
 
 	for(y = 0; y < bmp->rows; y++)
 	{

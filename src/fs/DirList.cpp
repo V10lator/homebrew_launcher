@@ -1,3 +1,4 @@
+#include "../gctypes.h"
 /****************************************************************************
  * Copyright (C) 2010
  * by Dimok
@@ -75,7 +76,7 @@ bool DirList::LoadPath(const std::string & folder, const char *filter, u32 flags
     if(folderpath.find('/') == std::string::npos)
         folderpath += '/';
 
-	return InternalLoadPath(folderpath);
+    return InternalLoadPath(folderpath);
 }
 
 bool DirList::InternalLoadPath(std::string &folderpath)

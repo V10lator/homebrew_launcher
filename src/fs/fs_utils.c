@@ -1,3 +1,4 @@
+#include "../gctypes.h"
 #include <malloc.h>
 #include <string.h>
 #include <stdio.h>
@@ -98,7 +99,7 @@ int LoadFileToMem(const char *filepath, u8 **inbuffer, u32 *size)
     if(size)
         *size = filesize;
 
-	return filesize;
+    return filesize;
 }
 
 int CheckFile(const char * filepath)

@@ -1,5 +1,7 @@
+#include "../gctypes.h"
 #include <coreinit/core.h>
 #include <coreinit/memory.h>
+#include <coreinit/memorymap.h>
 #include <coreinit/debug.h>
 #include <coreinit/thread.h>
 #include <coreinit/cache.h>
@@ -114,7 +116,7 @@ static void __attribute__((noinline)) kern_write(const void *addr, uint32_t valu
 
 int exploitThread(int argc, char **argv)
 {
-	OSDynLoadModule gx2_handle;
+	OSDynLoad_Module gx2_handle;
 	OSDynLoad_Acquire("gx2.rpl", &gx2_handle);
 
 	void (*pGX2SetSemaphore)(uint64_t *sem, int action);
@@ -304,7 +306,7 @@ static unsigned int load_loader_elf(unsigned char* baseAddress)
 
 int CheckKernelExploit(void)
 {
-    if(OSEffectiveToPhysical((void*)0xA0000000) == 0x10000000)
+    if(OSEffectiveToPhysical(0xA0000000) == 0x10000000)
     {
         log_printf("Running kernel setup\n");
 
