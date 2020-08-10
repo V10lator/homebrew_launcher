@@ -129,6 +129,7 @@ HomebrewWindow::HomebrewWindow(int w, int h)
         homebrewButtons[idx].button = new GuiButton(homebrewButtonImgData->getWidth(), homebrewButtonImgData->getHeight());
 
         homebrewButtons[idx].selectImg = new GuiImage(homebrewButtonSelectedImageData);
+        homebrewButtons[idx].selectImg->setScale(0.93f);
 
         homebrewButtons[idx].button->setImage(homebrewButtons[idx].image);
         homebrewButtons[idx].button->setLabel(homebrewButtons[idx].nameLabel, 0);

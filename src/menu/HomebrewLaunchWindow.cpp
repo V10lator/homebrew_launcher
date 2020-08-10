@@ -118,6 +118,8 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     descriptionText.setMaxWidth(width - 200, GuiText::WRAP);
     append(&descriptionText);
 
+    loadSelectedImg.setScale(1.1f);
+
     scaleFactor = 1.0f;
     loadImg.setScale(scaleFactor);
     loadBtn.setSize(scaleFactor * loadImg.getWidth(), scaleFactor * loadImg.getHeight());
@@ -132,9 +134,10 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     loadBtn.setSelectable(true);
     loadBtn.setImageOver(&loadSelectedImg);
     loadBtn.setdrawOverOnlyWhenSelected(true);
-    backBtn.setEffectGrow();
     loadBtn.clicked.connect(this, &HomebrewLaunchWindow::OnLoadButtonClick);
     append(&loadBtn);
+
+    backSelectedImg.setScale(1.1f);
 
     backImg.setScale(scaleFactor);
     backBtn.setSize(scaleFactor * backImg.getWidth(), scaleFactor * backImg.getHeight());
@@ -149,7 +152,6 @@ HomebrewLaunchWindow::HomebrewLaunchWindow(const std::string & launchPath, GuiIm
     backBtn.setSelectable(true);
     backBtn.setImageOver(&backSelectedImg);
     backBtn.setdrawOverOnlyWhenSelected(true);
-    backBtn.setEffectGrow();
     backBtn.clicked.connect(this, &HomebrewLaunchWindow::OnBackButtonClick);
     append(&backBtn);
 
