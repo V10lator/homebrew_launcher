@@ -37,7 +37,7 @@ INCLUDES	:=	src
 # options for code generation
 #-------------------------------------------------------------------------------
 CFLAGS	:=	-g -Wall -Ofast -ffunction-sections -flto=auto -fuse-linker-plugin \
-			-fno-fat-lto-objects $(MACHDEP)
+			-fno-fat-lto-objects -pipe $(MACHDEP)
 
 CFLAGS	+=	$(INCLUDE) -D__WIIU__ -D__WUT__ -D_GNU_SOURCE
 
