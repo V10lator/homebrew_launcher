@@ -102,6 +102,8 @@ private:
     TcpReceiver tcpReceiver;
 
     bool inputDisabled;
+
+    int previousIndex;
 };
 
 #endif //_HOMEBREW_WINDOW_H_

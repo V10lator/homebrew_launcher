@@ -188,6 +188,7 @@ HomebrewWindow::HomebrewWindow(int w, int h)
     append(&aButton);
 
     inputDisabled = false;
+    previousIndex = -1;
 }
 
 HomebrewWindow::~HomebrewWindow()
@@ -289,6 +290,17 @@ void HomebrewWindow::OnLeftArrowClick(GuiButton *button, const GuiController *co
         if(listOffset == 0)
             remove(&arrowLeftButton);
         append(&arrowRightButton);
+
+        clearSelections();
+
+        if (previousIndex > 0)
+        {
+            if (previousIndex - 4 >= 0)
+            {
+                homebrewButtons[previousIndex - 4].button->setState(STATE_SELECTED);
+                previousIndex -= 4;
+            }
+        }
     }
 }
 
@@ -306,6 +318,23 @@ void HomebrewWindow::OnRightArrowClick(GuiButton *button, const GuiController *c
             remove(&arrowRightButton);
 
         append(&arrowLeftButton);
+
+        clearSelections();
+
+        if (previousIndex > 0)
+        {
+            if (previousIndex + 4 < homebrewButtons.size())
+            {
+                homebrewButtons[previousIndex + 4].button->setState(STATE_SELECTED);
+                previousIndex += 4;
+            }
+            else
+            {
+                int index = homebrewButtons.size() - 1;
+                homebrewButtons[index].button->setState(STATE_SELECTED);
+                previousIndex = index;
+            }
+        }
     }
 }
 
@@ -347,6 +376,7 @@ void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *contr
     {
         homebrewButtons[min].button->setState(STATE_SELECTED);
         selected(controller);
+        previousIndex = 0;
         return;
     }
     
@@ -369,6 +399,8 @@ void HomebrewWindow::OnUpDownClick(GuiButton *button, const GuiController *contr
         homebrewButtons[index].button->setState(STATE_SELECTED);
         selected(controller);
     }
+
+    previousIndex = index;
 }
 
 void HomebrewWindow::OnAClick(GuiButton *button, const GuiController *controller, GuiTrigger *trigger)
@@ -413,8 +445,6 @@ void HomebrewWindow::draw(CVideo *pVideo)
     if(bUpdatePositions)
     {
         bUpdatePositions = false;
-
-        clearSelections();
 
         for(uint32_t i = 0; i < homebrewButtons.size(); i++)
         {
